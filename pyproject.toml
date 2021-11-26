@@ -13,6 +13,7 @@ transformers = "^4.12.5"
 matplotlib = "^3.5.0"
 seaborn = "^0.11.2"
 ipykernel = "^6.5.1"
+tqdm = "^4.62.3"
 
 [tool.poetry.dev-dependencies]
 
