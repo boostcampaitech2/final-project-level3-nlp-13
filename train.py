@@ -43,7 +43,7 @@ if __name__=='__main__':
     # 1. 실험 환경 변수 읽어 오기
     config = get_config()
 
-    # 2. 데이터 불러오기
+    # 2. 데이터 불러오기 TO DO
     print("data load !!")
 
     # 3. 토크나이저 불러오기
