@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "team-clue-final-project"
+version = "0.1.0"
+description = "Naver Boostcamp AI-TECH 2th, team-clue's final project"
+authors = ["Team-clue"]
+license = "CC-BY-SA-4.0 License"
+
+[tool.poetry.dependencies]
+python = "^3.8"
+pandas = "^1.3.4"
+torch = "^1.10.0"
+transformers = "^4.12.5"
+matplotlib = "^3.5.0"
+seaborn = "^0.11.2"
+ipykernel = "^6.5.1"
+
+[tool.poetry.dev-dependencies]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
