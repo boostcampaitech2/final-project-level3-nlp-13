@@ -24,7 +24,7 @@ def set_trainer(
             토크나이저의 이름과 타입에 따라 학습 및 추론에 사용할 모델 반환
     '''
     training_args = TrainingArguments(   
-        report_to='wandb',
+        report_to=['wandb'],
         output_dir=config['output']['model_save_dir'],
         save_total_limit=config['train']['save_total_limit'],
         num_train_epochs=config['train']['epochs'],
@@ -35,7 +35,8 @@ def set_trainer(
         weight_decay=config['train']['weight_decay'],        
         save_strategy=config['train']['save_strategy'],     
         evaluation_strategy=config['train']['evaluation_strategy'],               
-        load_best_model_at_end=config['train']['load_best_model_at_end']
+        load_best_model_at_end=config['train']['load_best_model_at_end'],
+        run_name=config['wandb']['run_name']
     )
 
     trainer = Trainer(
