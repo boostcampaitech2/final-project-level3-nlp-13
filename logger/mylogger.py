@@ -1,4 +1,28 @@
 import logging
+import pytz
+import logging
+import datetime
+
+
+class Formatter(logging.Formatter):
+    """override logging.Formatter to use an aware datetime object"""
+
+    def converter(self, timestamp):
+        # Create datetime in UTC
+        dt = datetime.datetime.fromtimestamp(timestamp, tz=pytz.UTC)
+        # Change datetime's timezone
+        return dt.astimezone(pytz.timezone('Asia/Seoul'))
+
+    def formatTime(self, record, datefmt=None):
+        dt = self.converter(record.created)
+        if datefmt:
+            s = dt.strftime(datefmt)
+        else:
+            try:
+                s = dt.isoformat(timespec='milliseconds')
+            except TypeError:
+                s = dt.isoformat()
+        return s
 
 def set_logger():
     '''
@@ -8,8 +32,9 @@ def set_logger():
     mylogger = logging.getLogger("process")
     mylogger.setLevel(logging.INFO)
 
-    formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
-    
+
+    formatter = Formatter(
+        '%(asctime)s;%(name)s - %(levelname)s - %(message)s', '%Y-%m-%d %H:%M:%S')
     stream_handler = logging.StreamHandler()
     stream_handler.setFormatter(formatter)
     mylogger.addHandler(stream_handler)
