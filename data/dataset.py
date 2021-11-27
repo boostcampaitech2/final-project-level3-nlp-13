@@ -14,7 +14,7 @@ class DatasetForHateSpeech(Dataset):
     )->None:
         """
             Arguments:
-                - type : 데이터 종류 , keywords=(Training, Validation, Test) 
+                - type : 데이터 종류 , keywords=(Train, Validation, Test) 
                 - tokenizer : 토크나이저 종류
                 - version : 데이터 셋 버전
     

@@ -1,3 +1,6 @@
 __pycache__/
 configs/
 results
+notebook/
+dataset/
+.gitignore
