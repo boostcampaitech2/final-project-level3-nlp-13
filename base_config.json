@@ -1,6 +1,9 @@
 {
     "data": {
-        "data_path" : ""  
+        "train_data_path" : "../dataset/",
+        "train_data_version" : "v1",
+        "valid_data_path" : "../dataset/",
+        "valid_data_version" : "v1" 
     },
     "model": {
         "model_name": "klue/bert-base",

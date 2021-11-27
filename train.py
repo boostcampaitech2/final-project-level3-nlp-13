@@ -4,7 +4,11 @@ import getopt
 from utills.utill import read_config
 from models.utill import get_model, get_tokenizer
 from train_utills.trainer_setting import set_trainer
+from data.dataset import DatasetForHateSpeech
+
 from logger.mylogger import set_logger
+
+
 
 def get_config(loger):
     '''
@@ -61,13 +65,21 @@ if __name__=='__main__':
     )
     loger.info("Load tokenizer Completed")
     
-    '''
-    To Do
-    동현님이 불러온 데이터와 불러온 토크나이저로 
-    토크나이징 해서 데이터셋에 집어 넣기
-    '''
-    train_dataset = None
-    valid_dataset = None
+    loger.info("Make dataset")
+    train_dataset = DatasetForHateSpeech(
+            type = 'Training', 
+            tokenizer = tokenizer,
+            path =  config['data']['train_data_path'],
+            version = config['data']['train_data_version']
+        )
+    loger.info("Make dataset completed (Train)")
+    valid_dataset = DatasetForHateSpeech(
+            type = 'Validation', 
+            tokenizer = tokenizer,
+            path =  config['data']['valid_data_path'],
+            version = config['data']['valid_data_version']
+        )
+    loger.info("Make dataset completed (Valid)")
 
     # 4. 모델 및 옵티마이저 불러오기
     loger.info("Load model")
