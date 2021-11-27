@@ -38,7 +38,7 @@ def get_config(loger):
     
     # 입력이 필수적인 옵션 입력이 없으면 오류 메시지 출력
     if len(config_path) < 1:
-        loger.info(f"{file_name} -c <config_path> is madatory")
+        loger.error(f"{file_name} -c <config_path> is madatory")
         sys.exit(2)
 
     config = read_config(config_path)
@@ -60,7 +60,7 @@ if __name__=='__main__':
         tokenizer_type=config['tokenizer']['tokenizer_type']
     )
     loger.info("Load tokenizer Completed")
-
+    exit(0)
     '''
     To Do
     동현님이 불러온 데이터와 불러온 토크나이저로 
