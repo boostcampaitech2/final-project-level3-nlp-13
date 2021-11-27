@@ -25,10 +25,10 @@ class DatasetForHateSpeech(Dataset):
         self.data = pd.read_csv(self.path, sep="\t")
 
         self.tokenized_data = tokenizer(
-            self.data['Sentence'].tolist(),
+            self.data['comments'].tolist(),
         )
         
-        self.labels = self.data['result'].tolist()
+        self.labels = self.data['label'].tolist()
 
     def __getitem__(self, idx):
         return self.tokenized_data[idx], self.labels[idx]
