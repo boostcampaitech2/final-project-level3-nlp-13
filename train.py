@@ -60,7 +60,7 @@ if __name__=='__main__':
         tokenizer_type=config['tokenizer']['tokenizer_type']
     )
     loger.info("Load tokenizer Completed")
-
+    
     '''
     To Do
     동현님이 불러온 데이터와 불러온 토크나이저로 
