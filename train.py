@@ -4,9 +4,14 @@ import getopt
 from utills.utill import read_config
 from models.utill import get_model, get_tokenizer
 from train_utills.trainer_setting import set_trainer
+from logger.mylogger import set_logger
 
-def get_config():
+def get_config(loger):
     '''
+        arguments
+            loger
+                로깅을 위한 객체
+
         summary
             config.json을 읽어와서 반환
     '''
@@ -20,20 +25,20 @@ def get_config():
         opts, etc_args = getopt.getopt(argv[1:], "hc:", ["help", "config_path="])
     except getopt.GetoptError:
         # 잘못된 옵션을 입력하는 경우
-        print(file_name, "-c <config_path>")
+        loger.error(f"wrong config path, please follow -> {file_name} -c <config_path>")
         sys.exit(2)
         
     # 입력된 옵션을 적절히 변수로 입력
     for opt, arg in opts:
         if opt in ("-h", "--help"):
-            print(file_name, "-c <config_path>")
+            loger.info(f"{file_name} HELP: -c <config_path>")
             sys.exit(0)
         elif opt in ("-c", "--config_path"):
             config_path = arg
     
     # 입력이 필수적인 옵션 입력이 없으면 오류 메시지 출력
     if len(config_path) < 1:
-        print(file_name, "-c <config_path> is madatory")
+        loger.info(f"{file_name} -c <config_path> is madatory")
         sys.exit(2)
 
     config = read_config(config_path)
@@ -41,16 +46,20 @@ def get_config():
 
 if __name__=='__main__':
     # 1. 실험 환경 변수 읽어 오기
-    config = get_config()
+    loger = set_logger()
+    config = get_config(loger)
 
     # 2. 데이터 불러오기 TO DO
-    print("data load !!")
+    loger.info("Load data")
+    loger.info("Load data Completed")
 
     # 3. 토크나이저 불러오기
+    loger.info("Load tokenizer")
     tokenizer = get_tokenizer(
         tokenizer_name=config['tokenizer']['tokenizer_name'], 
         tokenizer_type=config['tokenizer']['tokenizer_type']
     )
+    loger.info("Load tokenizer Completed")
 
     '''
     To Do
@@ -61,14 +70,18 @@ if __name__=='__main__':
     valid_dataset = None
 
     # 4. 모델 및 옵티마이저 불러오기
+    loger.info("Load model")
     model = get_model(
         model_name=config['model']['model_name'], 
         model_type=config['model']['model_type']
     )
+    loger.info("Load model Completed")
     
     # 5. 모델 학습하기
+    loger.info("Set trainer")
     trainer = set_trainer(config, model, train_dataset, valid_dataset)
 
     # 6. 학습
+    loger.info("Start train")
     trainer.train()
     
