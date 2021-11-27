@@ -7,7 +7,8 @@
     },
     "model": {
         "model_name": "klue/bert-base",
-        "model_type": "huggingface"
+        "model_type": "huggingface",
+        "num_classes": 2
     },
     "tokenizer": {
         "tokenizer_name": "klue/bert-base",

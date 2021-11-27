@@ -1,9 +1,10 @@
 from typing import *
-from transformers import AutoModelForSequenceClassification, AutoTokenizer
+from transformers import AutoConfig, AutoModelForSequenceClassification, AutoTokenizer
 
 def get_model(
         model_name: str,
         model_type: str = 'huggingface',
+        num_classes: int = 2,
     ):
     '''
         arguments
@@ -21,9 +22,11 @@ def get_model(
     '''
 
     if model_type == 'huggingface':
-        model = AutoModelForSequenceClassification.from_pretrained(model_name)
+        model_config = AutoConfig.from_pretrained(model_name)
+        model_config.num_labels = num_classes    
+        model = AutoModelForSequenceClassification.from_pretrained(model_name, config=model_config)
     elif model_type == 'custom':
-        print(model_name)
+        print(num_classes, model_name)
 
     return model
 
