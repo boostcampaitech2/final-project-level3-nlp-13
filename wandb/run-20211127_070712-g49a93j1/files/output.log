@@ -1,0 +1,18 @@
+  0%|                                                                                                                                                                                            | 0/2470 [00:00<?, ?it/s]Traceback (most recent call last):
+  File "train.py", line 99, in <module>
+    trainer.train()
+  File "/opt/conda/envs/final/lib/python3.8/site-packages/transformers/trainer.py", line 1290, in train
+    for step, inputs in enumerate(epoch_iterator):
+  File "/opt/conda/envs/final/lib/python3.8/site-packages/torch/utils/data/dataloader.py", line 521, in __next__
+    data = self._next_data()
+  File "/opt/conda/envs/final/lib/python3.8/site-packages/torch/utils/data/dataloader.py", line 561, in _next_data
+    data = self._dataset_fetcher.fetch(index)  # may raise StopIteration
+  File "/opt/conda/envs/final/lib/python3.8/site-packages/torch/utils/data/_utils/fetch.py", line 52, in fetch
+    return self.collate_fn(data)
+  File "/opt/conda/envs/final/lib/python3.8/site-packages/transformers/data/data_collator.py", line 66, in default_data_collator
+    return torch_default_data_collator(features)
+  File "/opt/conda/envs/final/lib/python3.8/site-packages/transformers/data/data_collator.py", line 87, in torch_default_data_collator
+    features = [vars(f) for f in features]
+  File "/opt/conda/envs/final/lib/python3.8/site-packages/transformers/data/data_collator.py", line 87, in <listcomp>
+    features = [vars(f) for f in features]
+TypeError: vars() argument must have __dict__ attribute

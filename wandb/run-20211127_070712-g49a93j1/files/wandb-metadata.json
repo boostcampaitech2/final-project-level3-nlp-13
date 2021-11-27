@@ -1,0 +1,27 @@
+{
+    "os": "Linux-4.4.0-210-generic-x86_64-with-glibc2.17",
+    "python": "3.8.12",
+    "heartbeatAt": "2021-11-27T07:07:13.280753",
+    "startedAt": "2021-11-27T07:07:12.109468",
+    "docker": null,
+    "gpu": "Tesla V100-PCIE-32GB",
+    "gpu_count": 1,
+    "cpu_count": 8,
+    "cuda": null,
+    "args": [
+        "-c",
+        "configs/config.json"
+    ],
+    "state": "running",
+    "program": "train.py",
+    "codePath": "train.py",
+    "git": {
+        "remote": "https://github.com/boostcampaitech2/final-project-level3-nlp-13.git",
+        "commit": "1b4862ad51d28f6549a7442b67db6ee42cde5365"
+    },
+    "email": "lkh1075@yonsei.ac.kr",
+    "root": "/opt/ml/git/final-project-level3-nlp-13",
+    "host": "f3bb5d700222",
+    "username": "root",
+    "executable": "/opt/conda/envs/final/bin/python"
+}

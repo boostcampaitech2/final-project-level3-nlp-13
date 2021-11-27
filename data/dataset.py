@@ -23,14 +23,14 @@ class DatasetForHateSpeech(Dataset):
             Summary:
                 Tokenizing 된 Hate Speech 데이터 셋 객체
         """
-        self.path = os.path.join(path, f"{type}", f"data_{version}.tsv")
-        self.data = pd.read_csv(self.path, sep="\t")
+        self.path = os.path.join(path, f"{type}", f"data_{version}.csv")
+        self.data = pd.read_csv(self.path, sep=",")
 
         self.tokenized_data = tokenizer(
-            self.data['Sentence'].tolist(),
+            self.data['comments'].tolist(),#Sentence
         )
         
-        self.labels = self.data['result'].tolist()
+        self.labels = self.data['label'].tolist()
 
     def __getitem__(self, idx):
         return self.tokenized_data[idx], self.labels[idx]
