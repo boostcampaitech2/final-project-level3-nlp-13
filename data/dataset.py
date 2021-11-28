@@ -28,6 +28,7 @@ class DatasetForHateSpeech(Dataset):
 
         self.tokenized_data = tokenizer(
             self.data['comments'].tolist(),#Sentence
+
         )
         
         self.labels = self.data['label'].tolist()
