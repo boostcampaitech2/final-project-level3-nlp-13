@@ -28,9 +28,12 @@ class DatasetForHateSpeech(Dataset):
 
         self.tokenized_data = tokenizer(
             self.data['comments'].tolist(),#Sentence
-
+            return_tensors="pt",
+            padding=True,
+            truncation=True,
+            max_length=256,
+            add_special_tokens=True,
         )
-        
         self.labels = self.data['label'].tolist()
 
     def __getitem__(self, idx):
