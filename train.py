@@ -67,7 +67,7 @@ if __name__=='__main__':
     
     loger.info("Make dataset")
     train_dataset = DatasetForHateSpeech(
-            type = 'Training', 
+            type = 'train', 
             tokenizer = tokenizer,
             path =  config['data']['train_data_path'],
             version = config['data']['train_data_version']
@@ -75,7 +75,7 @@ if __name__=='__main__':
     loger.info("Make dataset completed (Train)")
     
     valid_dataset = DatasetForHateSpeech(
-            type = 'Validation', 
+            type = 'valid', 
             tokenizer = tokenizer,
             path =  config['data']['valid_data_path'],
             version = config['data']['valid_data_version']
