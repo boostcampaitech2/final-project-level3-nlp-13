@@ -87,7 +87,8 @@ if __name__=='__main__':
     loger.info("Load model")
     model = get_model(
         model_name=config['model']['model_name'], 
-        model_type=config['model']['model_type']
+        model_type=config['model']['model_type'],
+        num_classes=config['model']['num_classes']
     )
     loger.info("Load model Completed")
     
