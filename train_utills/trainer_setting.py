@@ -18,7 +18,7 @@ def compute_metrics(pred):
   acc = accuracy_score(labels, preds)
 
   return {
-      'micro f1 score': f1,
+      'macro f1 score': f1,
       'accuracy': acc,
   }
 
@@ -57,7 +57,7 @@ def set_trainer(
         evaluation_strategy=config['train']['evaluation_strategy'],               
         load_best_model_at_end=config['train']['load_best_model_at_end'],
         run_name=config['wandb']['run_name'],
-        metric_for_best_model = 'eval_micro f1 score'
+        metric_for_best_model = 'eval_macro f1 score'
     )
 
     trainer = Trainer(
