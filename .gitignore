@@ -1,3 +1,5 @@
 __pycache__/
 configs/
 results
+wandb/
+nohup.out

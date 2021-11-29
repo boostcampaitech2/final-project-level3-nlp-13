@@ -34,7 +34,7 @@ def set_logger():
 
 
     formatter = Formatter(
-        '%(asctime)s;%(name)s - %(levelname)s - %(message)s', '%Y-%m-%d %H:%M:%S')
+        '%(asctime)s - %(levelname)s - %(message)s', '%Y-%m-%d %H:%M:%S')
     stream_handler = logging.StreamHandler()
     stream_handler.setFormatter(formatter)
     mylogger.addHandler(stream_handler)
