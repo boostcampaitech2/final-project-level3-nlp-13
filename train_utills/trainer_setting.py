@@ -2,6 +2,26 @@ from typing import *
 
 from transformers import Trainer, TrainingArguments
 
+from sklearn.metrics import f1_score, accuracy_score
+
+def macro_f1(preds, labels):
+    """ micro f1 계산 """
+    return f1_score(labels, preds, average="macro") * 100.0
+
+def compute_metrics(pred):
+  """ validation을 위한 metrics function """
+  labels = pred.label_ids
+  preds = pred.predictions.argmax(-1)
+  probs = pred.predictions
+
+  f1 = macro_f1(preds, labels)
+  acc = accuracy_score(labels, preds)
+
+  return {
+      'macro f1 score': f1,
+      'accuracy': acc,
+  }
+
 def set_trainer(
         config: Dict, 
         model, # hugging face or custom 모델 
@@ -36,7 +56,8 @@ def set_trainer(
         save_strategy=config['train']['save_strategy'],     
         evaluation_strategy=config['train']['evaluation_strategy'],               
         load_best_model_at_end=config['train']['load_best_model_at_end'],
-        run_name=config['wandb']['run_name']
+        run_name=config['wandb']['run_name'],
+        metric_for_best_model = 'eval_macro f1 score'
     )
 
     trainer = Trainer(
@@ -44,6 +65,9 @@ def set_trainer(
         args=training_args,
         train_dataset=train_dataset,
         eval_dataset=valid_dataset,
+        compute_metrics=compute_metrics
     )
 
     return trainer
+
+

@@ -1,3 +1,6 @@
+import os
+os.environ["TOKENIZERS_PARALLELISM"] = "false"
+
 import sys
 import getopt
 
@@ -7,8 +10,6 @@ from train_utills.trainer_setting import set_trainer
 from data.dataset import DatasetForHateSpeech
 
 from logger.mylogger import set_logger
-
-
 
 def get_config(loger):
     '''
