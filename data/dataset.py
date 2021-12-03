@@ -1,7 +1,10 @@
+from typing import *
 from torch.utils.data import Dataset
 from transformers import AutoTokenizer
 import pandas as pd
 import os
+
+from data.preprocessing import del_stopword
 
 #DATA_PATH = "../dataset/"
 
@@ -11,6 +14,7 @@ class DatasetForHateSpeech(Dataset):
         type : str,
         tokenizer : AutoTokenizer,
         path : str,
+        config : Dict,
         version : str = "v1",
     )->None:
         """
@@ -18,6 +22,7 @@ class DatasetForHateSpeech(Dataset):
                 - type : 데이터 종류 , keywords=(train, valid, test) 
                 - tokenizer : 토크나이저 종류
                 - path: 데이터 경로
+                - config: 각종 설정을 저장한 dict
                 - version : 데이터 셋 버전
     
             Summary:
@@ -25,6 +30,9 @@ class DatasetForHateSpeech(Dataset):
         """
         self.path = os.path.join(path, f"{type}", f"data_{version}.tsv")
         self.data = pd.read_csv(self.path, sep="\t", encoding='utf-8')
+
+        if 'stopwords' in config['data']['preprocessing']:
+            self.data['comments'] = del_stopword(self.data['comments'].tolist())
 
         self.tokenized_data = tokenizer(
             self.data['comments'].tolist(),#Sentence

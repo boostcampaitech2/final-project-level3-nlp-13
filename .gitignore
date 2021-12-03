@@ -3,3 +3,4 @@ configs/
 results
 wandb/
 nohup.out
+logs

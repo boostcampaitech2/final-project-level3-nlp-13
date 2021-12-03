@@ -54,22 +54,19 @@ if __name__=='__main__':
     loger = set_logger()
     config = get_config(loger)
 
-    # 2. 데이터 불러오기 TO DO
-    loger.info("Load data")
-    loger.info("Load data Completed")
-
-    # 3. 토크나이저 불러오기
+    # 2. 토크나이저 불러오기
     loger.info("Load tokenizer")
     tokenizer = get_tokenizer(
         tokenizer_name=config['tokenizer']['tokenizer_name'], 
         tokenizer_type=config['tokenizer']['tokenizer_type']
     )
     loger.info("Load tokenizer Completed")
-    
+
     loger.info("Make dataset")
     train_dataset = DatasetForHateSpeech(
             type = 'train', 
             tokenizer = tokenizer,
+            config = config,
             path =  config['data']['train_data_path'],
             version = config['data']['train_data_version']
         )
@@ -78,12 +75,13 @@ if __name__=='__main__':
     valid_dataset = DatasetForHateSpeech(
             type = 'valid', 
             tokenizer = tokenizer,
+            config = config,
             path =  config['data']['valid_data_path'],
             version = config['data']['valid_data_version']
         )
     loger.info("Make dataset completed (Valid)")
 
-    # 4. 모델 및 옵티마이저 불러오기
+    # 3. 모델 및 옵티마이저 불러오기
     loger.info("Load model")
     model = get_model(
         model_name=config['model']['model_name'], 
@@ -92,11 +90,11 @@ if __name__=='__main__':
     )
     loger.info("Load model Completed")
     
-    # 5. 모델 학습하기
+    # 4. 모델 학습하기
     loger.info("Set trainer")
     trainer = set_trainer(config, model, train_dataset, valid_dataset)
 
-    # 6. 학습
+    # 5. 학습
     loger.info("Start train")
     trainer.train()
     
