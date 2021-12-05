@@ -13,10 +13,10 @@ def del_stopword(
             - texts: text들
         
         return type
-            str
+            - str
 
         summary
-            text들을 받아 불용어 token을 제거한 text를 반환
+            - text들을 받아 불용어 token을 제거한 text를 반환
     '''
     loger = set_logger()
     loger.info("Delete stop words")

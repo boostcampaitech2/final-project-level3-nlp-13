@@ -28,7 +28,7 @@ class Formatter(logging.Formatter):
 def set_logger():
     '''
         summary
-            로깅 객체 및 포맷 정의
+            - 로깅 객체 및 포맷 정의
     '''
     file_name = 'logs/' + str(datetime.datetime.now()) + '.txt'
     logging.basicConfig(filename=file_name, level=logging.INFO)
