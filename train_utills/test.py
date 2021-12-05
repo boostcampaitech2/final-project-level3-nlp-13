@@ -91,7 +91,7 @@ def do_test(
     result['accuracy'] = accuracy_score(result["real"], result["inference"])
     
     j = json.dumps(result, indent=4)
-    save_path = os.path.join(config['output']['result_save_path'], config['wandb']['run_name'] + '.csv')
+    save_path = os.path.join(config['output']['result_save_path'], config['wandb']['run_name'] + '.json')
     with open(save_path, "w") as outfile:
         json.dump(result, outfile)
 
