@@ -117,6 +117,6 @@ if __name__=='__main__':
             )
         loger.info("Make dataset completed (Test)")
 
-        result = do_test(config, test_dataset)
+        result = do_test(config, model, test_dataset)
         loger.info(f"f1-score: {result['f1-score']} | accuracy: {result['accuracy']} | runtime: {result['time']['runtime']}")
 

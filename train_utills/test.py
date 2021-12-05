@@ -28,7 +28,8 @@ def load_best_model(
     weight_list = glob(model_dir + '*')
     sorted(weight_list)
 
-    model.load_state_dict(weight_list[-1] + '/pytorch_model.bin')
+    model.load_state_dict(torch.load(weight_list[-1] + '/pytorch_model.bin'))
+    print(f"load complete!! {weight_list[-1]}")
     return model
 
 def do_test(
@@ -48,8 +49,9 @@ def do_test(
         Summary
             - teset dataset을 이용해 metric 및 inference time test를 진행
     '''
-
+    device = 'cuda:0' if torch.cuda.is_available() else 'cpu'
     model = load_best_model(config['output']['model_save_dir'], model)
+    model = model.to(device)
 
     dataloader = DataLoader(test_dataset, batch_size=1)
 
@@ -70,8 +72,9 @@ def do_test(
         t_end = torch.cuda.Event(enable_timing=True)
 
         t_start.record()
-        pred = model(*item)
-        pred = torch.argmax(pred)
+        pred = model(input_ids = item['input_ids'].to(device), 
+            attention_mask = item['attention_mask'].to(device))
+        pred = torch.argmax(pred['logits'])
 
         t_end.record()
         torch.cuda.synchronize()
@@ -79,7 +82,7 @@ def do_test(
         time_measure_inference += t_inference
 
         result["inference"].append(int(pred.detach()))
-        result["real"].append(int(item['label'].detach()))
+        result["real"].append(int(item['labels'].detach().cpu()))
         result["time"]["inference"].append(t_inference) 
 
     result["time"]["runtime"] = time_measure_inference
