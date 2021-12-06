@@ -68,25 +68,6 @@ if __name__=='__main__':
     )
     loger.info("Load tokenizer Completed")
 
-    loger.info("Make dataset")
-    train_dataset = DatasetForHateSpeech(
-            type = 'train', 
-            tokenizer = tokenizer,
-            config = config,
-            path =  config['data']['train_data_path'],
-            version = config['data']['train_data_version']
-        )
-    loger.info("Make dataset completed (Train)")
-    
-    valid_dataset = DatasetForHateSpeech(
-            type = 'valid', 
-            tokenizer = tokenizer,
-            config = config,
-            path =  config['data']['valid_data_path'],
-            version = config['data']['valid_data_version']
-        )
-    loger.info("Make dataset completed (Valid)")
-
     # 3. 모델 및 옵티마이저 불러오기
     loger.info("Load model")
     model = get_model(
@@ -95,17 +76,37 @@ if __name__=='__main__':
         num_classes=config['model']['num_classes']
     )
     loger.info("Load model Completed")
-    
-    # 4. 모델 학습하기
-    loger.info("Set trainer")
-    trainer = set_trainer(config, model, train_dataset, valid_dataset)
 
-    # 5. 학습
     if config['train']['do_train']:
+        # 4. 학습 및 검증을 위한 데이터 준비
+        loger.info("Make dataset")
+        train_dataset = DatasetForHateSpeech(
+                type = 'train', 
+                tokenizer = tokenizer,
+                config = config,
+                path =  config['data']['train_data_path'],
+                version = config['data']['train_data_version']
+            )
+        loger.info("Make dataset completed (Train)")
+        
+        valid_dataset = DatasetForHateSpeech(
+                type = 'valid', 
+                tokenizer = tokenizer,
+                config = config,
+                path =  config['data']['valid_data_path'],
+                version = config['data']['valid_data_version']
+            )
+        loger.info("Make dataset completed (Valid)")
+        
+        # 5. 모델 학습하기
+        loger.info("Set trainer")
+        trainer = set_trainer(config, model, train_dataset, valid_dataset)
+
+        # 6. 학습
         loger.info("Start train")
         trainer.train()
 
-    # 6. 평가 (use testset)
+    # 7. 평가 (use testset)
     if config['test']['do_test']:
         loger.info("Start test!!")
         test_dataset = DatasetForHateSpeech(
