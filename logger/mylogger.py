@@ -3,6 +3,7 @@ import pytz
 import logging
 import datetime
 
+from glob import glob
 
 class Formatter(logging.Formatter):
     """override logging.Formatter to use an aware datetime object"""
@@ -27,11 +28,12 @@ class Formatter(logging.Formatter):
 def set_logger():
     '''
         summary
-            로깅 객체 및 포맷 정의
+            - 로깅 객체 및 포맷 정의
     '''
+    file_name = 'logs/' + str(datetime.datetime.now()) + '.txt'
+    logging.basicConfig(filename=file_name, level=logging.INFO)
     mylogger = logging.getLogger("process")
     mylogger.setLevel(logging.INFO)
-
 
     formatter = Formatter(
         '%(asctime)s - %(levelname)s - %(message)s', '%Y-%m-%d %H:%M:%S')

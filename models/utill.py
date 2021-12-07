@@ -8,17 +8,17 @@ def get_model(
     ):
     '''
         arguments
-            model_name : str
+            - model_name : str
                 모델의 이름을 반환 허깅페이스의 경우 pretrained 모델의 이름
                 커스텀 모델의 경우 클래스 이름
-            model_type : str
+            - model_type : str
                 huggingface or custom
 
         return
-            torch.nn.module
+            - torch.nn.module
 
         summary
-            모델의 이름과 타입에 따라 학습 및 추론에 사용할 모델 반환
+            - 모델의 이름과 타입에 따라 학습 및 추론에 사용할 모델 반환
     '''
 
     if model_type == 'huggingface':

@@ -30,18 +30,18 @@ def set_trainer(
     ):
     '''
         arguments
-            config : str
+            - config : str
                 실험 설정을 위한 하이퍼파라미터 값들
-            model : str
+            - model : str
                 hugging face or custom 모델 
-            train_dataset, valid_dataset : torch.nn.Dataset
+            - train_dataset, valid_dataset : torch.nn.Dataset
                 학습 및 검증에 사용할 데이터 셋
 
         return
-            AutoTokenizer
+            - AutoTokenizer
 
         summary
-            토크나이저의 이름과 타입에 따라 학습 및 추론에 사용할 모델 반환
+            - 토크나이저의 이름과 타입에 따라 학습 및 추론에 사용할 모델 반환
     '''
     training_args = TrainingArguments(   
         report_to=['wandb'],

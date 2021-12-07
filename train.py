@@ -7,6 +7,7 @@ import getopt
 from utills.utill import read_config
 from models.utill import get_model, get_tokenizer
 from train_utills.trainer_setting import set_trainer
+from train_utills.test import do_test
 from data.dataset import DatasetForHateSpeech
 
 from logger.mylogger import set_logger
@@ -54,36 +55,20 @@ if __name__=='__main__':
     loger = set_logger()
     config = get_config(loger)
 
-    # 2. 데이터 불러오기 TO DO
-    loger.info("Load data")
-    loger.info("Load data Completed")
+        # logging for currnet infom
+    loger.info('model name: ' + config['model']['model_name'])
+    loger.info('tokenizer name: ' + config['tokenizer']['tokenizer_name'])
+    loger.info('wandb run_name: ' + config['wandb']['run_name'])
 
-    # 3. 토크나이저 불러오기
+    # 2. 토크나이저 불러오기
     loger.info("Load tokenizer")
     tokenizer = get_tokenizer(
         tokenizer_name=config['tokenizer']['tokenizer_name'], 
         tokenizer_type=config['tokenizer']['tokenizer_type']
     )
     loger.info("Load tokenizer Completed")
-    
-    loger.info("Make dataset")
-    train_dataset = DatasetForHateSpeech(
-            type = 'train', 
-            tokenizer = tokenizer,
-            path =  config['data']['train_data_path'],
-            version = config['data']['train_data_version']
-        )
-    loger.info("Make dataset completed (Train)")
-    
-    valid_dataset = DatasetForHateSpeech(
-            type = 'valid', 
-            tokenizer = tokenizer,
-            path =  config['data']['valid_data_path'],
-            version = config['data']['valid_data_version']
-        )
-    loger.info("Make dataset completed (Valid)")
 
-    # 4. 모델 및 옵티마이저 불러오기
+    # 3. 모델 및 옵티마이저 불러오기
     loger.info("Load model")
     model = get_model(
         model_name=config['model']['model_name'], 
@@ -91,12 +76,48 @@ if __name__=='__main__':
         num_classes=config['model']['num_classes']
     )
     loger.info("Load model Completed")
-    
-    # 5. 모델 학습하기
-    loger.info("Set trainer")
-    trainer = set_trainer(config, model, train_dataset, valid_dataset)
 
-    # 6. 학습
-    loger.info("Start train")
-    trainer.train()
-    
+    if config['train']['do_train']:
+        # 4. 학습 및 검증을 위한 데이터 준비
+        loger.info("Make dataset")
+        train_dataset = DatasetForHateSpeech(
+                type = 'train', 
+                tokenizer = tokenizer,
+                config = config,
+                path =  config['data']['train_data_path'],
+                version = config['data']['train_data_version']
+            )
+        loger.info("Make dataset completed (Train)")
+        
+        valid_dataset = DatasetForHateSpeech(
+                type = 'valid', 
+                tokenizer = tokenizer,
+                config = config,
+                path =  config['data']['valid_data_path'],
+                version = config['data']['valid_data_version']
+            )
+        loger.info("Make dataset completed (Valid)")
+        
+        # 5. 모델 학습하기
+        loger.info("Set trainer")
+        trainer = set_trainer(config, model, train_dataset, valid_dataset)
+
+        # 6. 학습
+        loger.info("Start train")
+        trainer.train()
+
+    # 7. 평가 (use testset)
+    if config['test']['do_test']:
+        loger.info("Start test!!")
+        test_dataset = DatasetForHateSpeech(
+                type = 'test', 
+                tokenizer = tokenizer,
+                config = config,
+                path =  config['data']['test_data_path'],
+                version = config['data']['test_data_version']
+            )
+        loger.info("Make dataset completed (Test)")
+
+        result = do_test(config, model, test_dataset)
+        loger.info(f"f1-score: {result['f1-score']} | accuracy: {result['accuracy']} | runtime: {result['time']['runtime']}")
+

@@ -16,6 +16,7 @@ ipykernel = "^6.5.1"
 tqdm = "^4.62.3"
 wandb = "^0.12.7"
 scikit-learn = "^1.0.1"
+nltk = "^3.6.5"
 
 [tool.poetry.dev-dependencies]
 
