@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sample Login Form</title>
+</head>
+<body>
+
+    <div>
+        <!-- 1.1. Post Ajax Sample Code -->
+        <h1>Ajax로 통신하기</h1>
+        <span>이름</span>
+        <input type='string' name='name'>
+        <span>메세지</span>
+        <input type='string' name='comment'>
+        <button id="ajax_post">ajax post</button>
+    </div>
+
+</body>
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script type='text/javascript'>
+        $(document).ready(function () {
+            console.log('page open...')
+        });
+
+        // 1.1. Post Ajax Sample Code
+        $("button[id='ajax_post']").on("click", function () {
+            name = $('input[name="name"]').val()
+            comment = $('input[name="comment"]').val()
+        
+            $.ajax({
+                url: '/sample/form_post',
+                type: 'POST',
+                data: JSON.stringify({name:name, comment: comment}),
+                dataType: "json",
+                contentType: "application/json",
+                success: function(data) {
+                    console.log('console logging!!')
+                    console.log(data)
+                    alert(data.message)
+                },
+            });
+        });
+    </script>
+</html>
+
