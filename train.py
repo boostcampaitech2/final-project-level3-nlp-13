@@ -3,6 +3,7 @@ os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
 import sys
 import getopt
+import pandas as pd
 
 from utills.utill import read_config
 from models.utill import get_model, get_tokenizer
@@ -119,5 +120,8 @@ if __name__=='__main__':
         loger.info("Make dataset completed (Test)")
 
         result = do_test(config, model, test_dataset)
-        loger.info(f"f1-score: {result['f1-score']} | accuracy: {result['accuracy']} | runtime: {result['time']['runtime']}")
+        data = pd.read_csv('~/data/hate_data/test.hate.no_label.csv')
+        data['label'] = result["inference"]
+        data.to_csv('./outputs/' + config['wandb']['run_name'] + '_submit.csv', index=False)
 
+        loger.info(f"f1-score: {result['f1-score']} | accuracy: {result['accuracy']} | runtime: {result['time']['runtime']}")

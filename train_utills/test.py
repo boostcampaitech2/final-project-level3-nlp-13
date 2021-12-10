@@ -2,6 +2,7 @@ from typing import *
 
 import os
 import json
+import pandas as pd
 from glob import glob
 
 from tqdm import tqdm
@@ -27,9 +28,9 @@ def load_best_model(
     '''
     weight_list = glob(model_dir + '*')
     sorted(weight_list)
-
-    model.load_state_dict(torch.load(weight_list[-1] + '/pytorch_model.bin'))
-    print(f"load complete!! {weight_list[-1]}")
+    print(weight_list)
+    model.load_state_dict(torch.load(weight_list[0] + '/pytorch_model.bin'))
+    print(f"load complete!! {weight_list[0]}")
     return model
 
 def do_test(
