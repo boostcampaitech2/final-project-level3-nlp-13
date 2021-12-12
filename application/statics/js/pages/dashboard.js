@@ -25,8 +25,9 @@ var optionsProfileVisit = {
 }
 let optionsVisitorsProfile  = {
 	series: [70, 30],
-	labels: ['Male', 'Female'],
-	colors: ['#435ebe','#55c6e8'],
+	labels: ['긍정', '부정'],
+	//colors: ['#435ebe','#55c6e8'],
+	colors: ['#55c6e8', '#FFCDD2'],
 	chart: {
 		type: 'donut',
 		width: '100%',

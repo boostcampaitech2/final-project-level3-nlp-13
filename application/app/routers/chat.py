@@ -6,9 +6,18 @@ from pydantic import BaseModel
 from starlette.responses import JSONResponse
 
 class Chat(BaseModel):
-    user: str
-    age: str
-    message: str
+    """[summary]
+        {
+            "user_info" : {"id" : 'rkdqus2006'},
+            "message" : {"text" : '반갑습니다 행님들'},
+            "model_result" : {"sentiment":0, "is_hate":0} ()
+        }
+    Args:
+        BaseModel ([type]): [description]
+    """
+    user_info: dict
+    message: dict
+    model_result : dict
 
 hate_speech = ['시발', '개새끼']
 
@@ -30,10 +39,7 @@ async def index(request: Request):
 @router.post("/sendMessage", response_model=Chat)
 def sendMessage(chat: Chat):
     res = dict(chat)
+    print(chat)
 
-    if res['message'] in hate_speech:
-        res['status'] = 'hate'
-    else:
-        res['status'] = 'normal'
 
     return JSONResponse(res)

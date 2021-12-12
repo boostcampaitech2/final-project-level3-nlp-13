@@ -41,7 +41,7 @@
                 class="sidebar-item active ">
                 <a href="/" class='sidebar-link'>
                     <i class="bi bi-grid-fill"></i>
-                    <span>Dashboard</span>
+                    <span>Live Streaming</span>
                 </a>
             </li>
         </ul>
@@ -70,7 +70,7 @@
                                                 </div>
                                             </div>
                                             <div class="col-md-8">
-                                                <h6 class="text-muted font-semibold">Profile Views</h6>
+                                                <h6 class="text-muted font-semibold">시청자 수</h6>
                                                 <h6 class="font-extrabold mb-0">112.000</h6>
                                             </div>
                                         </div>
@@ -87,7 +87,7 @@
                                                 </div>
                                             </div>
                                             <div class="col-md-8">
-                                                <h6 class="text-muted font-semibold">Followers</h6>
+                                                <h6 class="text-muted font-semibold">판매량</h6>
                                                 <h6 class="font-extrabold mb-0">183.000</h6>
                                             </div>
                                         </div>
@@ -133,101 +133,28 @@
                             <div class="col-12 col-xl-4">
                                 <div class="card">
                                     <div class="card-header">
-                                        <h4>Visitors Profile</h4>
+                                        <h4>긍·부정 비율</h4>
                                     </div>
                                     <div class="card-body">
                                         <div id="chart-visitors-profile"></div>
                                     </div>
                                 </div>
                             </div>
+
+                            
                             <div class="col-12 col-xl-8">
                                 <div class="card">
-                                    <div class="card-header">
-                                        <h4>Profile Visit</h4>
+                                    <div class="card-header" style="padding-bottom: 0px;">
+                                        <h4>감성분석 코멘트</h4>
                                     </div>
-                                    <div class="card-body">
-                                        <div id="chart-profile-visit"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="row">
-                            <!-- <div class="col-12 col-xl-4">
-                                <div class="card">
-                                    <div class="card-header">
-                                        <h4>Profile Visit</h4>
-                                    </div>
-                                    <div class="card-body">
-                                        <div class="row">
-                                            <div class="col-6">
-                                                <div class="d-flex align-items-center">
-                                                    <svg class="bi text-primary" width="32" height="32" fill="blue"
-                                                        style="width:10px">
-                                                        <use
-                                                            xlink:href="assets/vendors/bootstrap-icons/bootstrap-icons.svg#circle-fill" />
-                                                    </svg>
-                                                    <h5 class="mb-0 ms-3">Europe</h5>
-                                                </div>
-                                            </div>
-                                            <div class="col-6">
-                                                <h5 class="mb-0">862</h5>
-                                            </div>
-                                            <div class="col-12">
-                                                <div id="chart-europe"></div>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-6">
-                                                <div class="d-flex align-items-center">
-                                                    <svg class="bi text-success" width="32" height="32" fill="blue"
-                                                        style="width:10px">
-                                                        <use
-                                                            xlink:href="assets/vendors/bootstrap-icons/bootstrap-icons.svg#circle-fill" />
-                                                    </svg>
-                                                    <h5 class="mb-0 ms-3">America</h5>
-                                                </div>
-                                            </div>
-                                            <div class="col-6">
-                                                <h5 class="mb-0">375</h5>
-                                            </div>
-                                            <div class="col-12">
-                                                <div id="chart-america"></div>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-6">
-                                                <div class="d-flex align-items-center">
-                                                    <svg class="bi text-danger" width="32" height="32" fill="blue"
-                                                        style="width:10px">
-                                                        <use
-                                                            xlink:href="assets/vendors/bootstrap-icons/bootstrap-icons.svg#circle-fill" />
-                                                    </svg>
-                                                    <h5 class="mb-0 ms-3">Indonesia</h5>
-                                                </div>
-                                            </div>
-                                            <div class="col-6">
-                                                <h5 class="mb-0">1025</h5>
-                                            </div>
-                                            <div class="col-12">
-                                                <div id="chart-indonesia"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div> -->
-                            <div class="col-12">
-                                <div class="card">
-                                    <div class="card-header">
-                                        <h4>Latest Comments</h4>
-                                    </div>
-                                    <div class="card-body">
+                                    <div class="card-body" style="display: block; height: 367px; overflow-y: scroll;">
                                         <div class="table-responsive">
                                             <table class="table table-hover table-lg">
                                                 <thead>
                                                     <tr>
                                                         <th>Name</th>
                                                         <th>Comment</th>
+                                                        <th>time</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -243,19 +170,65 @@
                                                         <td class="col-auto">
                                                             <p class=" mb-0">Congratulations on your graduation!</p>
                                                         </td>
+                                                        <td class="col-auto">
+                                                            <p class=" mb-0">2021-12-12 14:41</p>
+                                                        </td>
+                                                    </tr>                                                    
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="card">
+                                    <div class="card-header" style="padding-bottom: 0;">
+                                        <h4>욕설, 혐오발언 코멘트</h4>
+                                    </div>
+                                    <div class="card-body" style="display: block; height: 280px; overflow-y: scroll;">
+                                        <div class="table-responsive">
+                                            <table class="table table-hover table-lg">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Name</th>
+                                                        <th>Comment</th>
+                                                        <th>time</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td class="col-3">
+                                                            <div class="d-flex align-items-center">
+                                                                <div class="avatar avatar-md">
+                                                                    <img src="{{ url_for('statics', path='/images/faces/5.jpg') }}">
+                                                                </div>
+                                                                <p class="font-bold ms-3 mb-0">Si Cantik</p>
+                                                            </div>
+                                                        </td>
+                                                        <td class="col-auto">
+                                                            <p class=" mb-0">Congratulations on your graduation!</p>
+                                                        </td>
+                                                        <td class="col-2">
+                                                            <p class=" mb-0">2021-12-12 14:43</p>
+                                                        </td>
                                                     </tr>
                                                     <tr>
                                                         <td class="col-3">
                                                             <div class="d-flex align-items-center">
                                                                 <div class="avatar avatar-md">
-                                                                    <img src="{{ url_for('statics', path='/images/faces/2.jpg') }}">
+                                                                    <img src="{{ url_for('statics', path='/images/faces/5.jpg') }}">
                                                                 </div>
-                                                                <p class="font-bold ms-3 mb-0">Si Ganteng</p>
+                                                                <p class="font-bold ms-3 mb-0">Si Cantik</p>
                                                             </div>
                                                         </td>
                                                         <td class="col-auto">
-                                                            <p class=" mb-0">Wow amazing design! Can you make another tutorial for
-                                                                this design?</p>
+                                                            <p class=" mb-0">Congratulations on your graduation!Congratulations on your graduation!Congratulations on your graduation!Congratulations on your graduation!</p>
+                                                        </td>
+                                                        <td class="col-2">
+                                                            <p class=" mb-0">2021-12-12 14:43</p>
                                                         </td>
                                                     </tr>
                                                 </tbody>
@@ -280,23 +253,23 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="card" style="height: 81.5%; display: block;">
+                        <div class="card">
                             <div class="card-header">
                                 <h4>Recent Messages</h4>
                             </div>
-                            <div class="card-content pb-4" style="height: 100%;">
-                                <div id="chattingBox" class="px-4" style="height: 70%; overflow-y: scroll;">
+                            <div class="card-content pb-4">
+                                <div id="chattingBox" class="px-4" style="height: 535px; overflow-y: scroll;">
                                     <div class="name ms-4">
-                                        <h6 class="text-muted mb-0">@test1</h6>
+                                        <h6 class="text-muted mb-0">@동긔 - 14:56</h6>
                                         <h5 class="mb-1">상품이 아주 마음에 듭니다!</h5>
                                     </div>
                                     <div class="name ms-4">
-                                        <h6 class="text-muted mb-0">@imdean</h6>
-                                        <h5 class="mb-1">Dean Winchester</h5>
+                                        <h6 class="text-muted mb-0">@슈가 - 14:57</h6>
+                                        <h5 class="mb-1" style="color: grey; font-style: italic;">부적절한 표현입니다.</h5>
                                     </div>
                                     <div class="name ms-4">
-                                        <h6 class="text-muted mb-0">@imdean</h6>
-                                        <h5 class="mb-1">Dean Winchester</h5>
+                                        <h6 class="text-muted mb-0">@픠케 - 15:00  <button>신고</button></h6>
+                                        <h5 class="mb-1">이거 사용해봤는데 진짜 별로에요...</h5>
                                     </div>
                
                                 </div>
@@ -308,14 +281,6 @@
                                 
                             </div>
                         </div>
-                        <!-- <div class="card">
-                            <div class="card-header">
-                                <h4>Visitors Profile</h4>
-                            </div>
-                            <div class="card-body">
-                                <div id="chart-visitors-profile"></div>
-                            </div>
-                        </div> -->
                     </div>
                 </section>
             </div>
@@ -352,26 +317,45 @@
             message = $('#exampleFormControlTextarea1').val()
 
             $.ajax({
-                url: '/sendMessage',
+                url: '/chat/sendMessage',
                 type: 'POST',
-                data: JSON.stringify({user:'KSW', age:'30', message: message}),
+                data: JSON.stringify({user_info:{'id': 'lswkim'}
+                                    , message: {'text': message}
+                                    , model_result:{'sentiment': 0, "is_hate": 0}
+                                }),
                 dataType: "json",
                 contentType: "application/json",
                 success: function(data) {
+
                     console.log(data);
-                    if(data.status == 'hate'){
-                        message = '부적절한 표현입니다.'
-                    } 
-                    console.log('console logging!!')
+                    text = data.message.text;
+                    html = ''
+                    if(data.model_result.sentiment == 0) {
 
-                    text = ''
-                    text += '<div class="name ms-4">';
-                    text += '<h6 class="text-muted mb-0">@test1</h6>'
-                    text += '<h5 class="mb-1">' + message + '</h5>'
-                    text += '</div>'
+                    } else if(data.model_result.sentiment == 0) {
 
-                    $('#chattingBox').append(text)
-                    $('#exampleFormControlTextarea1').val('')
+                    }
+
+                    if(data.model_result.is_hate == 0) {
+
+                    } else if(data.model_result.is_hate == 0) {
+
+                    } else {
+                        text = "부적절한 댓글 입니다."
+                    }
+                    html += '<div class="name ms-4">';
+                    html += '<h6 class="text-muted mb-0">@픠케 - 15:00  <button>신고</button></h6>';
+                    html += '<h5 class="mb-1">'+text+'</h5>';
+                    html += '</div>'
+
+                    // text = ''
+                    // text += '<div class="name ms-4">';
+                    // text += '<h6 class="text-muted mb-0">@test1</h6>'
+                    // text += '<h5 class="mb-1">' + message + '</h5>'
+                    // text += '</div>'
+
+                    // $('#chattingBox').append(text)
+                    // $('#exampleFormControlTextarea1').val('')
                 },
             });
             // $.ajax({
