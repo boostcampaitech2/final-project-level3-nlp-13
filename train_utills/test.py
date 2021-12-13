@@ -26,7 +26,7 @@ def load_best_model(
             - 저장 경로를 탐색해 best 모델을 로딩하여 반환
     '''
     weight_list = glob(model_dir + '*')
-    weight_list = sorted(weight_list)
+    weight_list = sorted(weight_list, key=lambda x: int(x.split('-')[-1]))
 
     model.load_state_dict(torch.load(weight_list[-1] + '/pytorch_model.bin'))
     print(f"load complete!! {weight_list[-1]}")
