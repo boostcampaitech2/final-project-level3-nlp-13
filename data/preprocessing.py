@@ -41,3 +41,4 @@ def del_stopword(
     loger.info("Complete delete stop words!!")
 
     return preprcessed_text
+

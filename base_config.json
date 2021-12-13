@@ -1,17 +1,17 @@
 {
     "data": {
         "train_data_path" : "../dataset/",
-        "train_data_version" : "v1",
+        "train_data_version" : "v2",
         "valid_data_path" : "../dataset/",
-        "valid_data_version" : "v1" 
+        "valid_data_version" : "v2" 
     },
     "model": {
-        "model_name": "klue/bert-base",
+        "model_name": "beomi/ELECTRA-base",
         "model_type": "huggingface",
         "num_classes": 3
     },
     "tokenizer": {
-        "tokenizer_name": "klue/bert-base",
+        "tokenizer_name": "beomi/ELECTRA-base",
         "tokenizer_type": "huggingface"
     },
     "train":{

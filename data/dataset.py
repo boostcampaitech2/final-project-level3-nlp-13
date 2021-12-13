@@ -6,8 +6,6 @@ import os
 
 from data.preprocessing import del_stopword
 
-#DATA_PATH = "../dataset/"
-
 class DatasetForHateSpeech(Dataset):
     def __init__(
         self, 
