@@ -18,12 +18,24 @@
     <link rel="shortcut icon" href="{{ url_for('statics', path='/images/favicon.svg') }}" type="image/x-icon">
     <script src="https://use.fontawesome.com/releases/v5.2.0/js/all.js"></script>
     {% endblock %}
+    <style>
+        input:read-only { outline: none; }
+        #amount { border: none; height: 24px; border-radius: 4px; padding: 0 1rem; color: #000; background: transparent; }
+        .slider-range { width: 100%; border-radius: 50px; height: 10px; background: rgba(255,255,255,0.2); position: relative; margin-left: 10px; margin-top: 6px;}
+        .slider-range+input { background: none; width: 80px; margin-right: 0; padding: 0; text-align: right; }
+        .slider-range .ui-slider-handle { border: 2px solid #fff; width: 16px; height: 16px; background: #ecad4a; border-radius: 50px; top: -3.5px; margin-left: -8px; position: absolute; z-index: 2; cursor: pointer; }
+        .slider-range .ui-slider-handle:focus { outline: none; }
+        .ui-slider-horizontal .ui-slider-range { top: 0; height: 100%; position: absolute; z-index: 1;display: block; background: #e6bf82; }
+
+        .attack_word {color: grey; font-style: italic;}
+
+    </style>
 </head>
 {% block body %}
 <body>
     <div id="app">
         <div id="sidebar" class="deactive">
-            <div class="sidebar-wrapper active">
+            <div class="sidebar-wrapper deactive">
                 <div class="sidebar-header">
                     <div class="d-flex justify-content-between">
                         <div class="logo">
@@ -55,7 +67,6 @@
                     <i class="bi bi-justify fs-3"></i>
                 </a>
             </header>
-            
             <div class="page-content">
                 <section class="row">
                     <div class="col-12 col-lg-3">
@@ -68,14 +79,22 @@
                                     </div>
                                     <div class="ms-3 name">
                                         <h5 class="font-bold">Live Commerce Management</h5>
-                                        <h6 class="text-muted mb-0">@Team-Clue</h6>
+                                        <!-- <h6 class="text-muted mb-0">@Team-Clue</h6> -->
+                                        <div class="form-group position-relative has-icon-left" style="height: 20px;">
+                                            <input id='userId' type="text" class="form-control" placeholder="Input with icon left" style="font-weight: bold;">
+                                            <div class="form-control-icon" style="top: 90%">
+                                                <i class="bi bi-person"></i>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div class="card">
-                            <div class="card-header">
-                                <h4>Messages</h4>
+                            <div class="card-header" style="display: flex;">
+                                <h4>Messages</h4> 
+                                <span style="margin-left: 50px;">Confidence</span>
+                                <span id="slider-range" class="slider-range"></span><input type="text" id="amount" readonly >
                             </div>
                             <div class="card-content pb-4">
                                 <div id="chattingBox" class="px-4" style="height: 535px; overflow-y: scroll;">
@@ -85,7 +104,7 @@
                                     </div>
                                     <div class="name ms-4">
                                         <h6 class="text-muted mb-0">@슈가 - 14:57</h6>
-                                        <h5 class="mb-1" style="color: grey; font-style: italic;">부적절한 표현입니다.</h5>
+                                        <h5 class="mb-1 attack_word">부적절한 표현입니다.</h5>
                                     </div>
                                     <div class="name ms-4">
                                         <h6 class="text-muted mb-0">@픠케 - 15:00  <button>신고</button></h6>
@@ -181,7 +200,6 @@
                                     </div>
                                 </div>
                             </div>
-
                             
                             <div class="col-12 col-xl-8">
                                 <div class="card">
@@ -219,7 +237,7 @@
                                                                 <div class="avatar avatar-md">
                                                                     <img src="{{ url_for('statics', path='/images/faces/5.jpg') }}">
                                                                 </div>
-                                                                <p class="font-bold ms-3 mb-0">Si Cantik</p>
+                                                                <p class="font-bold ms-3 mb-0">Lee</p>
                                                                 <span style="margin-left: 10px; cursor: pointer;" onclick="clickBan(this)"><i class="fas fa-ban"></i></span>
                                                             </div>
                                                         </td>
@@ -239,7 +257,7 @@
                                                                 <div class="avatar avatar-md">
                                                                     <img src="{{ url_for('statics', path='/images/faces/5.jpg') }}">
                                                                 </div>
-                                                                <p class="font-bold ms-3 mb-0">Si Cantik</p>
+                                                                <p class="font-bold ms-3 mb-0">Kim</p>
                                                                 <span style="margin-left: 10px; cursor: pointer;" onclick="clickBan(this)"><i class="fas fa-ban"></i></span>
                                                             </div>
                                                         </td>
@@ -287,65 +305,111 @@
 
     <script src="{{ url_for('statics', path='/js/mazer.js') }}"></script>
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    
     <script type='text/javascript'>
         $(document).ready(function () {
-            console.log('log....')
+            console.log('chatting page opened!!')
+
+            document.getElementById('exampleFormControlTextarea1').addEventListener('keydown', function(){
+                if(event.keyCode == 13){
+                    event.preventDefault();
+                    $("button[id='sendMessage']").click()
+                }
+            })
+
+            var idx = 0
+            setInterval(function() {
+                console.log('idx : ' + idx);
+                idx++
+                last_time = areaPosData[areaPosData.length-1]['x']
+                // Math.random() * (max - min) + min;
+                areaPosData.push({x: last_time + 5, y: Math.ceil(Math.random() * (200 - 80) + 80)})
+                areaNegData.push({x: last_time + 5, y: Math.ceil(Math.random() * (100 - 0) + 0)})
+
+                console.log(areaPosData)
+                console.log(areaNegData)
+
+                area.updateSeries([
+                        {
+                            name: "긍정",
+                            data: areaPosData,
+                        },
+                        {
+                            name: "부정",
+                            data: areaNegData,
+                        },
+                    ], true)
+            }, 30000);
+
+            
         });
-        
-        $("button[id='sendMessage']").on("click", function () {
-            message = $('#exampleFormControlTextarea1').val()
+
+        // dictionary of hate speech {'user': ['hate comment']}
+        var hate_speech_dict = {}
+        var totalCommentCnt = 0
+        var positiveCommentCnt = 0
+        var negativeCommentCnt = 0
+        var areaPosData = [
+			{x: 5, y: 100},
+			{x: 10, y: 110},
+			{x: 15, y: 140},
+			{x: 20, y: 120},
+			{x: 25, y: 90}
+		]
+        var areaNegData = [
+			{x: 5, y: 30},
+			{x: 10, y: 20},
+			{x: 15, y: 50},
+			{x: 20, y: 20},
+			{x: 25, y: 10}
+		]
+
+        $("button[id='sendMessage']").on("click", function() {
 
             $.ajax({
                 url: '/chat/sendMessage',
                 type: 'POST',
-                data: JSON.stringify({user_info:{'id': 'lswkim'}
-                                    , message: {'text': message}
-                                    , model_result:{'sentiment': 0, "is_hate": 0}
+                data: JSON.stringify({user_id: $('#userId').val()
+                                    , text: $('#exampleFormControlTextarea1').val()
                                 }),
                 dataType: "json",
                 contentType: "application/json",
                 success: function(data) {
 
-                    console.log(data);
-                    text = data.message.text;
-                    html = ''
-                    if(data.model_result.sentiment == 0) {
-
-                    } else if(data.model_result.sentiment == 0) {
-
-                    }
-
-                    if(data.model_result.is_hate == 0) {
-
-                    } else if(data.model_result.is_hate == 0) {
-
+                    // Case 별로 분류하기
+                    // 1. 감성글 여부 판단 -> 그래프에 반영
+                    if(data.label_senti == 0) {
+                        positiveCommentCnt++;
+                        totalCommentCnt++;
+                        areaPosData[areaPosData.length-1]['y'] += 1
                     } else {
-                        text = "부적절한 댓글 입니다."
+                        negativeCommentCnt++;
+                        totalCommentCnt++;
+                        areaNegData[areaNegData.length-1]['y'] += 1
                     }
+                    // 2. 욕설 글 판단
+                    //  2.1) 리스트에 추가
+                    //  2.2) 채팅창 출력값 변경
+                    // 3. 일반 글 그냥 출력
+
+                    console.log(data);
+                    html = '';
                     html += '<div class="name ms-4">';
-                    html += '<h6 class="text-muted mb-0">@픠케 - 15:00  <button>신고</button></h6>';
-                    html += '<h5 class="mb-1">'+text+'</h5>';
-                    html += '</div>'
+                    html += '<h6 class="text-muted mb-0">@' + data.user_id + ' - '+ data.time +'</h6>';
+                    html += '<h5 class="mb-1">' + data.text + '</h5>';
+                    html += '</div>';
 
-                    // text = ''
-                    // text += '<div class="name ms-4">';
-                    // text += '<h6 class="text-muted mb-0">@test1</h6>'
-                    // text += '<h5 class="mb-1">' + message + '</h5>'
-                    // text += '</div>'
+                    $('#chattingBox').append(html);
+                    $('#exampleFormControlTextarea1').val('');
 
-                    // $('#chattingBox').append(text)
-                    // $('#exampleFormControlTextarea1').val('')
+                    console.log(chartVisitorsProfile);
+                    chartVisitorsProfile.updateSeries(
+                        [positiveCommentCnt/totalCommentCnt
+                        , negativeCommentCnt/totalCommentCnt], true
+                    );
                 },
             });
-            // $.ajax({
-            //     url: "/test/" + 'lswkim',
-            //     type: "get",
-            //     dataType: "json",
-            //     contentType: "application/json",
-            //     success: function(data) {
-            //         console.log(data)
-            //     },
-            // });            
         });
 
         // Click Ban Event toggle (gray <-> red)
@@ -356,6 +420,23 @@
                 $(self).css('color', 'rgb(96, 112, 128)')
             }            
         }
+
+        // Confidence slide bar event
+        $(function() {
+            var options = {
+                range: 'min',
+                max: 100,
+                value: 85,
+                slide: function(event, ui) {
+                    var max = ui.value;
+                    $("#amount").val(max + "%");
+                }
+            }, max;
+
+            $("#slider-range").slider(options);
+            max = $("#slider-range").slider("values", 1);
+            $("#amount").val(max + "%");
+        });
 
     </script>
 

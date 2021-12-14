@@ -24,11 +24,11 @@ var areaOptions = {
 	series: [
 	  {
 		name: "긍정",
-		data: [31, 40, 28, 51, 42, 109, 100],
+		data: [],
 	  },
 	  {
 		name: "부정",
-		data: [11, 32, 45, 32, 34, 52, 41],
+		data: [],
 	  },
 	],
 	chart: {
@@ -61,7 +61,53 @@ var areaOptions = {
 	},
   };
  
-var area = new ApexCharts(document.querySelector("#area"), areaOptions);
+
+
+  var areaOptions2 = {
+	series: [
+	  {
+		name: "긍정",
+		data: [
+			{x: 5, y: 100},
+			{x: 10, y: 110},
+			{x: 15, y: 140},
+			{x: 20, y: 120},
+			{x: 25, y: 90}
+		],
+	  },
+	  {
+		name: "부정",
+		data: [
+			{x: 5, y: 30},
+			{x: 10, y: 20},
+			{x: 15, y: 50},
+			{x: 20, y: 20},
+			{x: 25, y: 10}
+		],
+	  },
+	],
+	chart: {
+	  height: 350,
+	  type: "area",
+	},
+	colors: ['#55c6e8', '#FFCDD2'],
+	dataLabels: {
+	  enabled: false,
+	},
+	stroke: {
+	  curve: "smooth",
+	},
+	tooltip: {
+	  x: {
+		format: "dd/MM/yy HH:mm",
+	  },
+	},
+	// xaxis: {
+	// 	type: 'datetime'
+	// }
+  };
+
+var area = new ApexCharts(document.querySelector("#area"), areaOptions2);
 var chartVisitorsProfile = new ApexCharts(document.getElementById('chart-visitors-profile'), optionsVisitorsProfile)
 
 area.render();
