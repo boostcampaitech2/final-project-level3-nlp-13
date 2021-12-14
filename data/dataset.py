@@ -52,3 +52,41 @@ class DatasetForHateSpeech(Dataset):
     def __len__(self):
         return len(self.data)
 
+class DatasetForSentimentSpeech(Dataset):
+
+    def __init__(
+        self, 
+        dataset
+    ) -> None:
+        """
+            Arguments:
+                - type : 데이터 종류 , keywords=(train, valid, test) 
+                - dataset :
+            Summary:
+                내용 적기
+        """
+        self.dataset = dataset.dropna(axis=0) 
+        self.dataset.drop_duplicates(subset=['document'], inplace=True)
+        self.tokenizer = AutoTokenizer.from_pretrained("monologg/koelectra-base-v3-discriminator")
+
+    def __len__(self):
+        return len(self.dataset)
+
+    def __getitem__(self, idx):
+        row = self.dataset.iloc[idx].values
+        text = row[0]
+        y = row[1]
+
+        inputs = self.tokenizer(
+            text, 
+            return_tensors='pt',
+            truncation=True,
+            max_length=256,
+            padding='max_length',
+            add_special_tokens=True
+            )
+
+        input_ids = inputs['input_ids'][0]
+        attention_mask = inputs['attention_mask'][0]
+
+        return input_ids, attention_mask, y
