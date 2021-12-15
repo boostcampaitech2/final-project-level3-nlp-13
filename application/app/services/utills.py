@@ -10,5 +10,7 @@ def is_FAQ(text:str):
     return False
 
 def is_greeting(text:str):
-    pass
+    if '안녕' in text or 'ㅎㅇ' in text:
+        return True
+    return False
 

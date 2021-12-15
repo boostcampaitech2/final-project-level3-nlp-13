@@ -42,15 +42,15 @@ def init():
     # 1. 악성 모델 로딩
     global beep_model, beep_tokenizer, senti_model, senti_tokenizer
     if beep_model is None:
-        beep_model = get_model('beep_best.bin')
+        beep_model = get_model(model_kind='beep_best.bin')
     if beep_tokenizer is None:
         beep_tokenizer = get_tokenizer()
     
     # 2. 감성 모델 로딩
     if senti_model is None:
-        senti_model = get_model('senti_best.bin')
+        senti_model = get_model(model_kind='senti_best.pt', model_name='monologg/koelectra-small-v3-discriminator')
     if senti_tokenizer is None:
-        senti_tokenizer = get_tokenizer()
+        senti_tokenizer = get_tokenizer(model_name='monologg/koelectra-small-v3-discriminator')
 
     # 3. 각종 사전 로딩
         # 욕설, 인사, 질문 등
@@ -85,7 +85,7 @@ def sendMessage(comments: Comments):
 
     # 1. 질문인가? 인사인가?
     if is_FAQ(preprocessed_text):
-        # To Do. FAQ 따로 저장
+        # FAQ 따로 저장
         res['is_question'] = True
         return JSONResponse(res)
 
@@ -108,6 +108,7 @@ def sendMessage(comments: Comments):
         # To Do.
             # preprocessed_text 알맞은 형태로 변경 
             # 결과 class 및 confidence에 따른 class 변경
+            # 악성 댓글이면 유저 카운트 증가
 
     # 4. 댓글 판단 결과 저장
     res['label_senti'] = senti_inference_result
