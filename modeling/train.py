@@ -75,6 +75,7 @@ if __name__=='__main__':
         model_type=config['model']['model_type'],
         num_classes=config['model']['num_classes']
     )
+    model.resize_token_embeddings(len(tokenizer))
     loger.info("Load model Completed")
 
     if config['train']['do_train']:

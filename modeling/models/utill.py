@@ -1,5 +1,8 @@
 from typing import *
+
+import torch
 from transformers import AutoConfig, AutoModelForSequenceClassification, AutoTokenizer
+from transformers import PreTrainedTokenizerFast
 
 def get_model(
         model_name: str,
@@ -24,9 +27,16 @@ def get_model(
     if model_type == 'huggingface':
         model_config = AutoConfig.from_pretrained(model_name)
         model_config.num_labels = num_classes    
-        model = AutoModelForSequenceClassification.from_pretrained(model_name, config=model_config)
+        model = AutoModelForSequenceClassification.from_pretrained(model_name, config=model_config)    
+    elif model_type == 'pretrained':
+         model_config = AutoConfig.from_pretrained(model_name + '/config.json')
+         model_config.num_labels = num_classes    
+         model = AutoModelForSequenceClassification.from_pretrained(model_name, config=model_config)
+         #state_dicts = torch.load(model_name + '/pytorch_model.bin')
+         #model.load_state_dict(state_dicts)
     elif model_type == 'custom':
         print(num_classes, model_name)
+    
 
     return model
 
@@ -51,6 +61,15 @@ def get_tokenizer(
 
     if tokenizer_type == 'huggingface':
         tokenizer = AutoTokenizer.from_pretrained(tokenizer_name)
+    elif tokenizer_type == 'char_level':
+        tokenizer = PreTrainedTokenizerFast(tokenizer_file="/opt/ml/trained_tok/vocab.json")
+        tokenizer.bos_token="[SOS]"
+        tokenizer.eos_token="[EOS]"
+        tokenizer.sep_token="[SEP]"
+        tokenizer.cls_token="[SOS]"
+        tokenizer.unk_token="[UNK]"
+        tokenizer.pad_token="[PAD]"
+        tokenizer.mask_token="[MASK]"
     elif tokenizer_type == 'custom':
         print(tokenizer_name)
 
