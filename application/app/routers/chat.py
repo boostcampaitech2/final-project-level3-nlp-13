@@ -19,7 +19,7 @@ class Chat(BaseModel):
             "message" : {"text" : '반갑습니다 행님들'},
             "model_result" : {"sentiment":0, "is_hate":0} ()
         }
-    Args:
+    Arguments:
         BaseModel ([type]): [description]
     """
     user_info: dict
@@ -60,12 +60,12 @@ def init():
 @router.get("/", response_class=HTMLResponse)
 async def index(request: Request):
     """[summary]
-    open page
-    Arguments:
-        request (Request): HttpRequest
+        open page
+        Arguments:
+            request (Request): HttpRequest
 
-    Returns:
-        HTMLResponse: html 형태로 리턴
+        Returns:
+            HTMLResponse: html 형태로 리턴
     """
     return templates.TemplateResponse("chat.html", {"request": request})
 
@@ -94,16 +94,18 @@ def sendMessage(chat: Chat):
         return JSONResponse(res)
 
     # 2. 감성 분석
-    senti_inference_result, senti_confidence = make_beep_inference(preprocessed_text, senti_model, senti_tokenizer)
+    senti_inference_result, senti_confidence = make_inference(preprocessed_text, senti_model, senti_tokenizer)
         # To Do.
             # 결과 class 및 confidence에 따른 class 변경
 
     # 3. 악성 분석
         # 3-1. 직접적 욕설 포함?
     if False:
+        # To Do.
+            # preprocessed_text 알맞은 형태로 변경 
         print("직접적인 욕설이 있음")
     else:
-        beep_inference_result, beep_confidence = make_beep_inference(preprocessed_text, beep_model, beep_tokenizer)
+        beep_inference_result, beep_confidence = make_inference(preprocessed_text, beep_model, beep_tokenizer)
         # To Do.
             # preprocessed_text 알맞은 형태로 변경 
             # 결과 class 및 confidence에 따른 class 변경
@@ -113,14 +115,17 @@ def sendMessage(chat: Chat):
     res['model_result']['is_hate'] = beep_inference_result
 
     # 5. 판단 결과에 따라 post_processing
-    res['message']['text'] = preprocessed_text
+    res['message']['text'] = preprocessed_text # 부적절한 채팅입니다.
 
     print(chat)
 
+    # How? 정보 꽉채워서 반환
+
     return JSONResponse(res)
 
-@router.post("/sendMessage/inference", description="댓글의 악성 여부를 판단합니다.")
-async def make_beep_inference(
+#@router.post("/sendMessage/inference", description="댓글의 악성 여부를 판단합니다.")
+#async
+def make_inference(
         text: str,
         model: AutoModelForSequenceClassification,
         tokenizer: AutoTokenizer
