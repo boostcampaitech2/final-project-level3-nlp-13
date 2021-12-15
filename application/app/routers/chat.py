@@ -8,8 +8,8 @@ from starlette.responses import JSONResponse
 from typing import Optional
 
 from datetime import date, datetime
-from models.model import get_model, get_tokenizer, predict_from_text
-from services.utills import is_FAQ, is_greeting
+from app.models.model import get_model, get_tokenizer, predict_from_text
+from app.services.utills import is_FAQ, is_greeting
 
 from transformers import AutoModelForSequenceClassification, AutoTokenizer
 
@@ -42,15 +42,16 @@ def init():
     # 1. 악성 모델 로딩
     global beep_model, beep_tokenizer, senti_model, senti_tokenizer
     if beep_model is None:
-        beep_model = get_model(model_kind='beep_best.bin')
+        beep_model = get_model(model_kind='beep_best.bin', numlabels=3)
     if beep_tokenizer is None:
         beep_tokenizer = get_tokenizer()
     
     # 2. 감성 모델 로딩
     if senti_model is None:
-        senti_model = get_model(model_kind='senti_best.pt', model_name='monologg/koelectra-small-v3-discriminator')
+        senti_model = get_model(model_kind='beep_best.bin', numlabels=3)
+        #senti_model = get_model(model_kind='senti_best.pt', numlabels=2, model_name='monologg/koelectra-small-v3-discriminator')
     if senti_tokenizer is None:
-        senti_tokenizer = get_tokenizer(model_name='monologg/koelectra-small-v3-discriminator')
+        senti_tokenizer = get_tokenizer()#model_name='monologg/koelectra-small-v3-discriminator'
 
     # 3. 각종 사전 로딩
         # 욕설, 인사, 질문 등
@@ -81,6 +82,7 @@ def sendMessage(comments: Comments):
             최종 결과를 반환
     '''
     res = dict(comments)
+    res['time'] = res['time'].strftime('%Y-%m-%d %H:%M:%S')
     preprocessed_text = res['text']
 
     # 1. 질문인가? 인사인가?
@@ -107,6 +109,9 @@ def sendMessage(comments: Comments):
         beep_inference_result, beep_confidence = make_inference(preprocessed_text, beep_model, beep_tokenizer)
         # To Do.
             # preprocessed_text 알맞은 형태로 변경 
+        if beep_inference_result == 0 or beep_inference_result == 1:
+            preprocessed_text = '모델에 의해 제거된 채팅입니다.'
+            print(beep_inference_result, beep_confidence)
             # 결과 class 및 confidence에 따른 class 변경
             # 악성 댓글이면 유저 카운트 증가
 
@@ -117,7 +122,7 @@ def sendMessage(comments: Comments):
     res['confidence_beep'] = beep_confidence
  
     # 5. 판단 결과에 따라 post_processing
-    res['message']['text'] = preprocessed_text # 부적절한 채팅입니다.
+    res['text'] = preprocessed_text # 부적절한 채팅입니다.
 
     return JSONResponse(res)
 
@@ -141,6 +146,7 @@ def make_inference(
     try:
         inference_result, confidence = predict_from_text(model=model, tokenizer=tokenizer, text=text)
     except:
-        raise HTTPException(status_code=404, detail=f"예측과정에서 오류가 발생했습니다. [text: {text}]")
+        #raise HTTPException(status_code=404, detail=f"예측과정에서 오류가 발생했습니다. [text: {text}]")\
+        print(f"예측과정에서 오류가 발생했습니다. [text: {text}]")
 
     return inference_result, confidence

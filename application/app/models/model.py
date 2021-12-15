@@ -2,7 +2,7 @@ from typing import *
 
 import torch
 
-from transformers import AutoModelForSequenceClassification, AutoConfig, AutoTokenizer
+from transformers import ElectraForSequenceClassification, AutoConfig, AutoTokenizer
 
 '''
 class_dict = {
@@ -12,17 +12,19 @@ class_dict = {
 }
 '''
 
-def get_model(model_kind:str, model_name:str='beomi/KcELECTRA-base')->AutoModelForSequenceClassification:
+def get_model(model_kind:str, numlabels:int, model_name:str='beomi/KcELECTRA-base')->ElectraForSequenceClassification:
     '''모델 가져오기'''
 
     device = 'cuda:0' if torch.cuda.is_available() else 'cpu'
-    model = AutoModelForSequenceClassification.from_pretrained(model_name).to(device)
-    '''
-    confing = AutoConfig.from_pretrained(model_name)
-    model = AutoModelForSequenceClassification(config=config)
-    state_dicts = torch.load('./models/weights/' + 'beep_best.bin')
+    #model = AutoModelForSequenceClassification.from_pretrained(model_name).to(device)
+    
+    config = AutoConfig.from_pretrained(model_name)
+    config.num_labels = numlabels
+    model = ElectraForSequenceClassification(config=config)
+    state_dicts = torch.load('./app/models/weights/' + model_kind)
     model.load_state_dict(state_dicts)
-    '''
+    model = model.to(device)
+    
     return model
 
 def get_tokenizer(model_name:str='beomi/KcELECTRA-base')->AutoTokenizer:
@@ -32,7 +34,7 @@ def get_tokenizer(model_name:str='beomi/KcELECTRA-base')->AutoTokenizer:
     return tokenizer
 
 def predict_from_text(
-    model: AutoModelForSequenceClassification,
+    model: ElectraForSequenceClassification,
     tokenizer: AutoTokenizer,
     text: str) -> Union[int, float]:
     '''text를 받아 악성 댓글 여부를 판단하여 반환'''
