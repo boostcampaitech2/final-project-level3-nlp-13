@@ -3,28 +3,26 @@ from fastapi import Request, Form, APIRouter, HTTPException
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
-from pydantic import BaseModel
-from pydantic.errors import NoneIsAllowedError
+from pydantic import BaseModel, Field
 from starlette.responses import JSONResponse
-from transformers.models.auto.tokenization_auto import AutoTokenizer
-from transformers.utils.dummy_pt_objects import AutoModelForSequenceClassification
+from typing import Optional
 
-from app.models.model import get_model, get_tokenizer, predict_from_text
-from app.services.utills import is_FAQ, is_greeting
+from datetime import date, datetime
+from models.model import get_model, get_tokenizer, predict_from_text
+from services.utills import is_FAQ, is_greeting
 
-class Chat(BaseModel):
-    """[summary]
-        {
-            "user_info" : {"id" : 'rkdqus2006'},
-            "message" : {"text" : '반갑습니다 행님들'},
-            "model_result" : {"sentiment":0, "is_hate":0} ()
-        }
-    Arguments:
-        BaseModel ([type]): [description]
-    """
-    user_info: dict
-    message: dict
-    model_result : dict
+from transformers import AutoModelForSequenceClassification, AutoTokenizer
+
+class Comments(BaseModel):
+    user_id: str = Field(default=str)
+    text: str = Field(default=str)
+    time: Optional[datetime] = Field(default_factory=datetime.now)
+    label_beep: Optional[int] = None
+    label_senti: Optional[int] = None
+    confidence_beep: Optional[float] = None
+    confidence_senti: Optional[float] = None
+    is_question: Optional[bool] = None
+
 
 router = APIRouter(prefix="/chat")
 templates = Jinja2Templates(directory="templates/")
@@ -69,8 +67,8 @@ async def index(request: Request):
     """
     return templates.TemplateResponse("chat.html", {"request": request})
 
-@router.post("/sendMessage", response_model=Chat)
-def sendMessage(chat: Chat):
+@router.post("/sendMessage", response_model=Comments)
+def sendMessage(comments: Comments):
     '''
         Arguments:
             - chat: 유저의 채팅에 대한 메타정보 딕셔너리
@@ -82,12 +80,13 @@ def sendMessage(chat: Chat):
             유저의 채팅 내용, 모델, 토크나이저를 입력받아 모델에 따른 분석결과를 활용해 post processing을 적용
             최종 결과를 반환
     '''
-    res = dict(chat)
-    preprocessed_text = res['message']['text']
+    res = dict(comments)
+    preprocessed_text = res['text']
+
     # 1. 질문인가? 인사인가?
     if is_FAQ(preprocessed_text):
-        # To Do.
-            # FAQ 따로 저장
+        # To Do. FAQ 따로 저장
+        res['is_question'] = True
         return JSONResponse(res)
 
     if is_greeting(preprocessed_text):
@@ -111,20 +110,16 @@ def sendMessage(chat: Chat):
             # 결과 class 및 confidence에 따른 class 변경
 
     # 4. 댓글 판단 결과 저장
-    res['model_result']['sentiment'] = senti_inference_result
-    res['model_result']['is_hate'] = beep_inference_result
-
+    res['label_senti'] = senti_inference_result
+    res['label_beep'] = beep_inference_result
+    res['confidence_senti'] = senti_confidence
+    res['confidence_beep'] = beep_confidence
+ 
     # 5. 판단 결과에 따라 post_processing
     res['message']['text'] = preprocessed_text # 부적절한 채팅입니다.
 
-    print(chat)
-
-    # How? 정보 꽉채워서 반환
-
     return JSONResponse(res)
 
-#@router.post("/sendMessage/inference", description="댓글의 악성 여부를 판단합니다.")
-#async
 def make_inference(
         text: str,
         model: AutoModelForSequenceClassification,
