@@ -14,3 +14,12 @@ def is_greeting(text:str):
         return True
     return False
 
+def is_beep(label:int):
+    if label == 1 or label == 2:
+        return True
+    return False
+
+def is_positive(label:int, confidence:float):
+    if label == 1 and confidence >= 0.85:
+        return True
+    return False
