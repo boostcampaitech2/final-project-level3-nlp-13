@@ -1,5 +1,7 @@
 from typing import *
 from fastapi import Request, Form, APIRouter, HTTPException
+import pandas as pd
+
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
@@ -16,9 +18,10 @@ from transformers import AutoModelForSequenceClassification, AutoTokenizer
 class Comments(BaseModel):
     user_id: str = Field(default=str)
     text: str = Field(default=str)
+    confidence: int = Field(default=int)
     time: Optional[datetime] = Field(default_factory=datetime.now)
-    label_beep: Optional[int] = None
-    label_senti: Optional[int] = None
+    label_beep: Optional[int] = None # 0: Common, 1: hate
+    label_senti: Optional[int] = None # 0: Common, 1: Neg, 2: Pos
     confidence_beep: Optional[float] = None
     confidence_senti: Optional[float] = None
     is_question: Optional[bool] = None

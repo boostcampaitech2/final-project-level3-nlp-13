@@ -20,92 +20,49 @@ let optionsVisitorsProfile  = {
 	}
 }
 
-var areaOptions = {
+var areaOptions2 = {
 	series: [
-	  {
-		name: "긍정",
-		data: [],
-	  },
-	  {
-		name: "부정",
-		data: [],
-	  },
+		{
+			name: "긍정",
+			data: [
+				{x: 5, y: 100},
+				{x: 10, y: 110},
+				{x: 15, y: 140},
+				{x: 20, y: 120},
+				{x: 25, y: 90}
+			],
+		},
+		{
+			name: "부정",
+			data: [
+				{x: 5, y: 30},
+				{x: 10, y: 20},
+				{x: 15, y: 50},
+				{x: 20, y: 20},
+				{x: 25, y: 10}
+			],
+		},
 	],
 	chart: {
-	  height: 350,
-	  type: "area",
+		height: 350,
+		type: "area",
 	},
 	colors: ['#55c6e8', '#FFCDD2'],
 	dataLabels: {
-	  enabled: false,
+		enabled: false,
 	},
 	stroke: {
-	  curve: "smooth",
-	},
-	xaxis: {
-	  type: "datetime",
-	  categories: [
-		"2018-09-19T00:00:00.000Z",
-		"2018-09-19T01:30:00.000Z",
-		"2018-09-19T02:30:00.000Z",
-		"2018-09-19T03:30:00.000Z",
-		"2018-09-19T04:30:00.000Z",
-		"2018-09-19T05:30:00.000Z",
-		"2018-09-19T06:30:00.000Z",
-	  ],
+		curve: "smooth",
 	},
 	tooltip: {
-	  x: {
-		format: "dd/MM/yy HH:mm",
-	  },
-	},
-  };
- 
-
-
-  var areaOptions2 = {
-	series: [
-	  {
-		name: "긍정",
-		data: [
-			{x: 5, y: 100},
-			{x: 10, y: 110},
-			{x: 15, y: 140},
-			{x: 20, y: 120},
-			{x: 25, y: 90}
-		],
-	  },
-	  {
-		name: "부정",
-		data: [
-			{x: 5, y: 30},
-			{x: 10, y: 20},
-			{x: 15, y: 50},
-			{x: 20, y: 20},
-			{x: 25, y: 10}
-		],
-	  },
-	],
-	chart: {
-	  height: 350,
-	  type: "area",
-	},
-	colors: ['#55c6e8', '#FFCDD2'],
-	dataLabels: {
-	  enabled: false,
-	},
-	stroke: {
-	  curve: "smooth",
-	},
-	tooltip: {
-	  x: {
-		format: "dd/MM/yy HH:mm",
-	  },
+			x: {
+			format: "dd/MM/yy HH:mm",
+		},
 	},
 	// xaxis: {
 	// 	type: 'datetime'
 	// }
-  };
+};
 
 var area = new ApexCharts(document.querySelector("#area"), areaOptions2);
 var chartVisitorsProfile = new ApexCharts(document.getElementById('chart-visitors-profile'), optionsVisitorsProfile)

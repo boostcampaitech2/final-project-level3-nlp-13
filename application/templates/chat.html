@@ -34,34 +34,7 @@
 {% block body %}
 <body>
     <div id="app">
-        <div id="sidebar" class="deactive">
-            <div class="sidebar-wrapper deactive">
-                <div class="sidebar-header">
-                    <div class="d-flex justify-content-between">
-                        <div class="logo">
-                            <a href="index.html"><img src="{{ url_for('statics', path='/images/logo/logo.png') }}" alt="Logo" srcset=""></a>
-                        </div>
-                        <div class="toggler">
-                            <a href="#" class="sidebar-hide d-xl-none d-block"><i class="bi bi-x bi-middle"></i></a>
-                        </div>
-                    </div>
-                </div>
-                <div class="sidebar-menu">
-                    <ul class="menu">
-                        <li class="sidebar-title">Menu</li>
-                        <li
-                            class="sidebar-item active ">
-                            <a href="/" class='sidebar-link'>
-                                <i class="bi bi-grid-fill"></i>
-                                <span>Live Streaming</span>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-                <button class="sidebar-toggler btn x"><i data-feather="x"></i></button>
-            </div>
-        </div>
-        <div id="main">
+        <div id="main" style="margin-left: 0px;">
             <header class="mb-3">
                 <a href="#" class="burger-btn d-block d-xl-none">
                     <i class="bi bi-justify fs-3"></i>
@@ -230,7 +203,7 @@
                                                         <th>time</th>
                                                     </tr>
                                                 </thead>
-                                                <tbody>
+                                                <tbody id='tbody-list'>
                                                     <tr>
                                                         <td class="col-2">
                                                             <div class="d-flex align-items-center">
@@ -238,17 +211,18 @@
                                                                     <img src="{{ url_for('statics', path='/images/faces/5.jpg') }}">
                                                                 </div>
                                                                 <p class="font-bold ms-3 mb-0">Lee</p>
-                                                                <span style="margin-left: 10px; cursor: pointer;" onclick="clickBan(this)"><i class="fas fa-ban"></i></span>
+                                                                <!-- <span style="margin-left: 10px; cursor: pointer;" onclick="clickBan(this)"><i class="fas fa-ban"></i></span> -->
+                                                                <span style="margin-left: 10px; cursor: pointer;" ondblclick="clickBan(this)"><i class="fas fa-ban"></i></span>
                                                             </div>
                                                         </td>
                                                         <td class="col-1">
-                                                            <p class=" mb-0">3</p>
+                                                            <p class="mb-0">3</p>
                                                         </td>
                                                         <td class="col-auto">
-                                                            <p class=" mb-0">시발, 느금마, 제품 존나 별로다</p>
+                                                            <p class="mb-0">시발, 느금마, 제품 존나 별로다</p>
                                                         </td>
                                                         <td class="col-2">
-                                                            <p class=" mb-0">2021-12-12 14:43</p>
+                                                            <p class="mb-0">2021-12-12 14:43</p>
                                                         </td>
                                                     </tr>
                                                     <tr>
@@ -262,13 +236,13 @@
                                                             </div>
                                                         </td>
                                                         <td class="col-1">
-                                                            <p class=" mb-0">3</p>
+                                                            <p class="mb-0">3</p>
                                                         </td>
                                                         <td class="col-auto">
-                                                            <p class=" mb-0">살 좀 빼세요</p>
+                                                            <p class="mb-0">살 좀 빼세요</p>
                                                         </td>
                                                         <td class="col-2">
-                                                            <p class=" mb-0">2021-12-12 14:55</p>
+                                                            <p class="mb-0">2021-12-12 14:55</p>
                                                         </td>
                                                     </tr>
                                                 </tbody>
@@ -306,47 +280,17 @@
     <script src="{{ url_for('statics', path='/js/mazer.js') }}"></script>
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="{{ url_for('statics', path='/js/extensions/sweetalert2.js') }}"></script>
+    <script src="{{ url_for('statics', path='/vendors/sweetalert2/sweetalert2.all.min.js') }}"></script>
+
     
     <script type='text/javascript'>
-        $(document).ready(function () {
-            console.log('chatting page opened!!')
-
-            document.getElementById('exampleFormControlTextarea1').addEventListener('keydown', function(){
-                if(event.keyCode == 13){
-                    event.preventDefault();
-                    $("button[id='sendMessage']").click()
-                }
-            })
-
-            var idx = 0
-            setInterval(function() {
-                console.log('idx : ' + idx);
-                idx++
-                last_time = areaPosData[areaPosData.length-1]['x']
-                // Math.random() * (max - min) + min;
-                areaPosData.push({x: last_time + 5, y: Math.ceil(Math.random() * (200 - 80) + 80)})
-                areaNegData.push({x: last_time + 5, y: Math.ceil(Math.random() * (100 - 0) + 0)})
-
-                console.log(areaPosData)
-                console.log(areaNegData)
-
-                area.updateSeries([
-                        {
-                            name: "긍정",
-                            data: areaPosData,
-                        },
-                        {
-                            name: "부정",
-                            data: areaNegData,
-                        },
-                    ], true)
-            }, 30000);
-
-            
-        });
 
         // dictionary of hate speech {'user': ['hate comment']}
-        var hate_speech_dict = {}
+        var hate_speech_dict = new Map();
+        hate_speech_dict.set('Lee', [['hmm.. u r so stupid...', '2021-12-12 14:43']]);
+        hate_speech_dict.set('Kim', [['what the fuck!', '2021-12-12 14:50'], ['got damn it..', '2021-12-12 15:43']]);
+
         var totalCommentCnt = 0
         var positiveCommentCnt = 0
         var negativeCommentCnt = 0
@@ -365,52 +309,112 @@
 			{x: 25, y: 10}
 		]
 
-        $("button[id='sendMessage']").on("click", function() {
+        function is_valid(){
+            if($('#exampleFormControlTextarea1').val() == ''){
+                return false
+            } else { 
+                return true
+            }
+        }
 
+        $("button[id='sendMessage']").on("click", function() {
+            if(!is_valid()){ return }
+
+            sendMessage($('#userId').val(), $('#exampleFormControlTextarea1').val(), false)
+            
+        });
+
+        function sendMessage(user_id, text, auto) {
             $.ajax({
                 url: '/chat/sendMessage',
                 type: 'POST',
-                data: JSON.stringify({user_id: $('#userId').val()
-                                    , text: $('#exampleFormControlTextarea1').val()
+                data: JSON.stringify({
+                                      user_id: user_id
+                                    , text: text
+                                    , confidence: Number($("#amount").val().replace('%', ''))
                                 }),
                 dataType: "json",
                 contentType: "application/json",
                 success: function(data) {
 
-                    // Case 별로 분류하기
-                    // 1. 감성글 여부 판단 -> 그래프에 반영
-                    if(data.label_senti == 0) {
-                        positiveCommentCnt++;
-                        totalCommentCnt++;
-                        areaPosData[areaPosData.length-1]['y'] += 1
-                    } else {
-                        negativeCommentCnt++;
-                        totalCommentCnt++;
-                        areaNegData[areaNegData.length-1]['y'] += 1
-                    }
-                    // 2. 욕설 글 판단
-                    //  2.1) 리스트에 추가
-                    //  2.2) 채팅창 출력값 변경
-                    // 3. 일반 글 그냥 출력
+                    text_html = '<h5 class="mb-1">' + data.text + '</h5>'
 
-                    console.log(data);
+                    if(data.is_question){
+                        text_html = '<h5 class="mb-1">' + '<i class="fas fa-question-circle"></i> ' + data.text + '</h5>';
+                    } else {
+                        // Case 별로 분류하기
+                        // 1. 감성글 여부 판단 -> 그래프에 반영
+                        is_hate_or_neg = false;
+
+                        if(data.label_senti == 2) {
+                            positiveCommentCnt++;
+                            totalCommentCnt++;
+                            areaPosData[areaPosData.length-1]['y'] += 1
+                        } else if(data.label_senti == 1){
+                            negativeCommentCnt++;
+                            totalCommentCnt++;
+                            areaNegData[areaNegData.length-1]['y'] += 1
+                            is_hate_or_neg = true
+                        }
+
+                        // 2. 욕설 글 판단
+                        //  2.1) 리스트에 추가
+                        //  2.2) 채팅창 출력값 변경
+                        if(data.label_beep == 1) {
+                            text_html = '<h5 class="mb-1 attack_word">부적절한 표현입니다.</h5>'
+                            is_hate_or_neg = true
+                        }
+
+                        if (is_hate_or_neg){
+
+                            if(hate_speech_dict.get(data.user_id) == undefined) {
+                                hate_speech_dict.set(data.user_id, [[data.text, data.time]])
+                            } else {
+                                hate_speech_dict.get(data.user_id).push([data.text, data.time])
+                            }
+                            
+                            redrawCommentList()
+                        }
+                    }
+
+                    // 3. 일반 글 그냥 출력
                     html = '';
                     html += '<div class="name ms-4">';
                     html += '<h6 class="text-muted mb-0">@' + data.user_id + ' - '+ data.time +'</h6>';
-                    html += '<h5 class="mb-1">' + data.text + '</h5>';
+                    html += text_html;
                     html += '</div>';
 
                     $('#chattingBox').append(html);
-                    $('#exampleFormControlTextarea1').val('');
-
-                    console.log(chartVisitorsProfile);
+                    $('#chattingBox').scrollTop(100000)
+                    
+                    if(!auto){
+                        $('#exampleFormControlTextarea1').val('');
+                    }
+                    
                     chartVisitorsProfile.updateSeries(
                         [positiveCommentCnt/totalCommentCnt
                         , negativeCommentCnt/totalCommentCnt], true
                     );
                 },
             });
-        });
+        }
+
+        // Click Table Row to see full Comment
+        function view_full_comment(self){
+            
+            user_id = $(self).children('td').eq(0).children('div').children('p').text()
+            text_list = hate_speech_dict.get(user_id)
+            html = ''
+
+            for (var i = 0; i < text_list.length; i++){
+                html += '<span>' + text_list[i][0] + '</span><br>'
+            }
+            
+            Swal.fire({
+                html: html,
+                icon: 'error'
+            })
+        }
 
         // Click Ban Event toggle (gray <-> red)
         function clickBan(self){
@@ -418,7 +422,40 @@
                 $(self).css('color', 'red')
             }else {
                 $(self).css('color', 'rgb(96, 112, 128)')
-            }            
+            }
+        }
+
+        function redrawCommentList(){
+            const mapSort = new Map([...hate_speech_dict.entries()].sort((a, b) => b[1].length - a[1].length));
+
+            $('#tbody-list').empty()
+            
+            for(let item of mapSort){
+                html = ''
+                html += '<tr ondblclick="view_full_comment(this)">'
+                html += '<td class="col-2">'
+                html += '<div class="d-flex align-items-center">'
+                html += '<div class="avatar avatar-md">'
+                html += '<img src=\'{{ url_for("statics", path="/images/faces/5.jpg") }}\'>'
+                html += '</div>'
+                html += '<p class="font-bold ms-3 mb-0">'+ item[0] +'</p>'
+                html += '<span style="margin-left: 10px; cursor: pointer;" onclick="clickBan(this)"><i class="fas fa-ban"></i></span>'
+                html += '</div>'
+                html += '</td>'
+                html += '<td class="col-1">'
+                html += '<p class="mb-0">' + item[1].length + '</p>'
+                html += '</td>'
+                html += '<td class="col-auto">'
+                html += '<p class="mb-0">' + item[1][item[1].length-1][0] + '</p>'
+                html += '</td>'
+                html += '<td class="col-2">'
+                html += '<p class="mb-0">' + item[1][item[1].length-1][1] + '</p>'
+                html += '</td>'
+                html += '</tr>'
+
+                $('#tbody-list').append(html)
+
+            }
         }
 
         // Confidence slide bar event
@@ -436,6 +473,63 @@
             $("#slider-range").slider(options);
             max = $("#slider-range").slider("values", 1);
             $("#amount").val(max + "%");
+        });
+
+        // load_sample_log()
+        function loadSampleLog() {
+            console.log('loadSampleLog in....')
+            $.ajax({
+                url: '/chat/loadSampleLog',
+                type: 'POST',
+                data: JSON.stringify({}),
+                dataType: "json",
+                contentType: "application/json",
+                success: function(data) {
+                    console.log(data)
+                    idx = 0
+                    setInterval(function() {
+                        console.log('idx : ' + idx);
+                        idx++
+                        sendMessage(data.comments[idx].id, data.comments[idx].comment, true)
+                        // Math.random() * (max - min) + min;
+                    }, 5000);
+                }
+            })
+        }
+
+        $(document).ready(function () {
+            console.log('chatting page opened!!')
+
+            document.getElementById('exampleFormControlTextarea1').addEventListener('keydown', function(){
+                if(event.keyCode == 13){
+                    event.preventDefault();
+                    $("button[id='sendMessage']").click()
+                }
+            })
+
+            loadSampleLog()
+            redrawCommentList()
+
+            var idx = 0
+            setInterval(function() {
+                console.log('idx : ' + idx);
+                idx++
+                last_time = areaPosData[areaPosData.length-1]['x']
+                // Math.random() * (max - min) + min;
+                areaPosData.push({x: last_time + 5, y: Math.ceil(Math.random() * (200 - 80) + 80)})
+                areaNegData.push({x: last_time + 5, y: Math.ceil(Math.random() * (100 - 0) + 0)})
+
+                area.updateSeries([
+                        {
+                            name: "긍정",
+                            data: areaPosData,
+                        },
+                        {
+                            name: "부정",
+                            data: areaNegData,
+                        },
+                    ], true)
+            }, 10000);
         });
 
     </script>
