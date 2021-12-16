@@ -15,6 +15,12 @@ from app.services.utills import is_FAQ, is_greeting, is_beep, is_positive
 
 from transformers import AutoModelForSequenceClassification, AutoTokenizer
 
+HATE = 1
+OFFENSIVE = 0
+POSITIVE = 1
+NEGATIVE = 0
+NORMAL = 2
+
 class Comments(BaseModel):
     user_id: str = Field(default=str)
     text: str = Field(default=str)
@@ -97,7 +103,7 @@ def sendMessage(comments: Comments):
         # To Do.
             # 결과 class 및 confidence에 따른 class 변경
     if not is_positive(senti_inference_result, senti_confidence):
-        senti_inference_result = 2
+        senti_inference_result = NORMAL
 
     # 3. 악성 분석
         # 3-1. 직접적 욕설 포함?
@@ -109,7 +115,6 @@ def sendMessage(comments: Comments):
         beep_inference_result, beep_confidence = make_inference(preprocessed_text, beep_model, beep_tokenizer)
         # To Do.
             # 결과 class 및 confidence에 따른 class 변경
-            # 악성 댓글이면 유저 카운트 증가
     
     # 욕설이 아니면 질문으로 분류
     if not is_beep(beep_inference_result):
@@ -119,8 +124,8 @@ def sendMessage(comments: Comments):
             return JSONResponse(res)
 
     # 부정이고 욕설이면 최종으로 욕설로 판단
-    if senti_inference_result == 0 and is_beep(beep_inference_result):
-        beep_inference_result = 0
+    if senti_inference_result == NEGATIVE and is_beep(beep_inference_result):
+        beep_inference_result = OFFENSIVE
         preprocessed_text = '모델에 의해 제거된 채팅입니다.'
 
     # 4. 댓글 판단 결과 저장
