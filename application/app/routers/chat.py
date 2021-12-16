@@ -10,7 +10,7 @@ from starlette.responses import JSONResponse
 from typing import Optional
 
 from datetime import date, datetime
-from app.models.model import get_model, get_tokenizer, predict_from_text
+from app.models.model import get_model, get_tokenizer, make_inference
 from app.services.utills import is_FAQ, is_greeting
 
 from transformers import AutoModelForSequenceClassification, AutoTokenizer
@@ -88,12 +88,7 @@ def sendMessage(comments: Comments):
     res['time'] = res['time'].strftime('%Y-%m-%d %H:%M:%S')
     preprocessed_text = res['text']
 
-    # 1. 질문인가? 인사인가?
-    if is_FAQ(preprocessed_text):
-        # FAQ 따로 저장
-        res['is_question'] = True
-        return JSONResponse(res)
-
+    # 1. 인사인가?
     if is_greeting(preprocessed_text):
         return JSONResponse(res)
 
@@ -117,6 +112,13 @@ def sendMessage(comments: Comments):
             print(beep_inference_result, beep_confidence)
             # 결과 class 및 confidence에 따른 class 변경
             # 악성 댓글이면 유저 카운트 증가
+    
+    # 욕설이 아니면 질문으로 분류
+    if beep_inference_result == 2:
+        if is_FAQ(preprocessed_text):
+            # FAQ 따로 저장
+            res['is_question'] = True
+            return JSONResponse(res)
 
     # 4. 댓글 판단 결과 저장
     res['label_senti'] = senti_inference_result
@@ -129,27 +131,11 @@ def sendMessage(comments: Comments):
 
     return JSONResponse(res)
 
-def make_inference(
-        text: str,
-        model: AutoModelForSequenceClassification,
-        tokenizer: AutoTokenizer
-                     )->Union[int, float]:
-    '''
-        Arguments:
-            - text: 유저의 채팅 내용
-            - model: 악성 또는 감성 분석 모델
-            - tokenizer: 악성 또는 감성 분석 모델의 토크나이저
+@router.post("/loadSampleLog")
+def loadSampleLog():
+    res = dict()    
+    df = pd.read_csv('files/sample_log.csv')
 
-        Returns:
-            int, float
+    res['comments'] = df.to_dict('records')
 
-        Summary:
-            유저의 채팅 내용, 모델, 토크나이저를 입력받아 모델에 따른 분석결과를 반환
-    '''
-    try:
-        inference_result, confidence = predict_from_text(model=model, tokenizer=tokenizer, text=text)
-    except:
-        #raise HTTPException(status_code=404, detail=f"예측과정에서 오류가 발생했습니다. [text: {text}]")\
-        print(f"예측과정에서 오류가 발생했습니다. [text: {text}]")
-
-    return inference_result, confidence
+    return JSONResponse(res)

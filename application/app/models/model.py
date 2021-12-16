@@ -2,7 +2,7 @@ from typing import *
 
 import torch
 
-from transformers import ElectraForSequenceClassification, AutoConfig, AutoTokenizer
+from transformers import ElectraForSequenceClassification, AutoModelForSequenceClassification, AutoConfig, AutoTokenizer
 
 '''
 class_dict = {
@@ -52,3 +52,28 @@ def predict_from_text(
     classes = torch.argmax(pred['logits'].detach()).detach().item()
     confidence = torch.max(pred['logits'].detach()).detach().item()
     return classes, confidence
+
+def make_inference(
+        text: str,
+        model: AutoModelForSequenceClassification,
+        tokenizer: AutoTokenizer
+                     )->Union[int, float]:
+    '''
+        Arguments:
+            - text: 유저의 채팅 내용
+            - model: 악성 또는 감성 분석 모델
+            - tokenizer: 악성 또는 감성 분석 모델의 토크나이저
+
+        Returns:
+            int, float
+
+        Summary:
+            유저의 채팅 내용, 모델, 토크나이저를 입력받아 모델에 따른 분석결과를 반환
+    '''
+    try:
+        inference_result, confidence = predict_from_text(model=model, tokenizer=tokenizer, text=text)
+    except:
+        #raise HTTPException(status_code=404, detail=f"예측과정에서 오류가 발생했습니다. [text: {text}]")\
+        print(f"예측과정에서 오류가 발생했습니다. [text: {text}]")
+
+    return inference_result, confidence
