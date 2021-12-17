@@ -23,15 +23,15 @@ def is_greeting(text:str):
         return True
     return False
 
-def is_beep(label:int):
-    if label == HATE or label == OFFENSIVE:
+def is_beep(label:int, confidence:float, base:float):
+    if (label == HATE or label == OFFENSIVE) and confidence >= base:
         return True
     return False
 
-def is_positive(label:int, confidence:float):
-    if label == POSITIVE and confidence >= 0.85:
+def is_positive(label:int, confidence:float, base:float):
+    if label == POSITIVE and confidence >= base:
         return True
-    if label == NEGATIVE and confidence >= 0.85:
+    if label == NEGATIVE and confidence >= base:
         return True
     return False
 

@@ -104,9 +104,9 @@ def sendMessage(comments: Comments):
     senti_inference_result, senti_confidence = make_inference(preprocessed_text, senti_model, senti_tokenizer)
         # To Do.
             # 결과 class 및 confidence에 따른 class 변경
-    # if not is_positive(senti_inference_result, senti_confidence):
-    #     senti_inference_result = NORMAL
-    print(senti_inference_result, senti_confidence, f'preprocessed_text: {preprocessed_text}')
+    if not is_positive(senti_inference_result, senti_confidence, res['confidence']):
+        senti_inference_result = NORMAL
+
     # 3. 악성 분석
         # 3-1. 직접적 욕설 포함?
     if False:
@@ -119,17 +119,16 @@ def sendMessage(comments: Comments):
             # 결과 class 및 confidence에 따른 class 변경
     
     # 욕설이 아니면 질문으로 분류
-    if not is_beep(beep_inference_result):
+    _is_beep = is_beep(beep_inference_result, beep_confidence, res['confidence'])
+    if not _is_beep:
         if is_FAQ(preprocessed_text):
             # FAQ 따로 저장
             res['is_question'] = True
             return JSONResponse(res)
 
     # 부정이고 욕설이면 최종으로 욕설로 판단
-    if senti_inference_result == NEGATIVE and is_beep(beep_inference_result):
+    if senti_inference_result == NEGATIVE and _is_beep:
         beep_inference_result = HATE
-        # 지우고
-        #preprocessed_text = '모델에 의해 제거된 채팅입니다.'
 
     # 4. 댓글 판단 결과 저장
     res['label_senti'] = senti_inference_result
