@@ -15,7 +15,7 @@ def is_FAQ(text: str):
 
     if '궁금' in text:
         return True
-    comp = re.compile(r'[가-힣a-zA-Zㄱ-ㅎㅏ-ㅣ]{2,}[?]$')
+    comp = re.compile(r'[가-힣a-zA-Zㄱ-ㅎㅏ-ㅣ]{2,}[?]+$')
     sub_text = a = comp.findall(text)
     if sub_text:
         return True
@@ -46,6 +46,7 @@ def is_positive(label: int, confidence: float, base: float):
 
 def check_beep_dictionary(text: str, beep_dic: List):
     '''주어진 문장에 욕설 사전에 포함된 문장이 있는지 없는지 판단'''
+    
     for beep_word in beep_dic:
         if beep_word in text:
             return True
