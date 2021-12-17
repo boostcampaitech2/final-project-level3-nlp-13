@@ -5,3 +5,5 @@ wandb/
 nohup.out
 logs
 outputs
+beep_best.bin
+senti_best.pt
