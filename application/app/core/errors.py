@@ -1,6 +1,0 @@
-class PredictException(BaseException):
-    ...
-
-
-class ModelLoadException(BaseException):
-    ...

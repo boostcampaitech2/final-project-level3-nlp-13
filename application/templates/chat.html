@@ -47,12 +47,10 @@
                             <div class="card-body py-4 px-5">
                                 <div class="d-flex align-items-center">
                                     <div class="avatar avatar-xl">
-                                        <!--<img src="{{ url_for('statics', path='/images/faces/1.jpg') }}" alt="Face 1">-->
                                         <img src="{{ url_for('statics', path='/images/logo/clue-logo.svg') }}" alt="Team-Clue">
                                     </div>
                                     <div class="ms-3 name">
                                         <h5 class="font-bold">Live Commerce Management</h5>
-                                        <!-- <h6 class="text-muted mb-0">@Team-Clue</h6> -->
                                         <div class="form-group position-relative has-icon-left" style="height: 20px;">
                                             <input id='userId' type="text" class="form-control" placeholder="Input with icon left" style="font-weight: bold;">
                                             <div class="form-control-icon" style="top: 90%">
@@ -396,7 +394,7 @@
             if(!is_valid()){ return }
 
             sendMessage($('#userId').val(), $('#exampleFormControlTextarea1').val(), false)
-            
+
         });
 
         function sendMessage(user_id, text, auto) {
@@ -440,11 +438,11 @@
                         // 1. 감성글 여부 판단 -> 그래프에 반영
                         is_hate_or_neg = false;
 
-                        if(data.label_senti == 2) {
+                        if(data.label_senti == 1) {
                             positiveCommentCnt++;
                             totalCommentCnt++;
                             areaPosData[areaPosData.length-1]['y'] += 1
-                        } else if(data.label_senti == 1){
+                        } else if(data.label_senti == 0){
                             negativeCommentCnt++;
                             totalCommentCnt++;
                             areaNegData[areaNegData.length-1]['y'] += 1
