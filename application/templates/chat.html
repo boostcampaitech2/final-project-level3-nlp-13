@@ -176,11 +176,27 @@
                             
                             <div class="col-12 col-xl-8">
                                 <div class="card">
-                                    <div class="card-header" style="padding-bottom: 0px;">
-                                        <h4>시간별 긍·부정 분포</h4>
+                                    <div class="card-header" style="padding-bottom: 0;">
+                                        <ul class="nav nav-tabs" id="myTab" role="tablist">
+                                            <li class="nav-item" role="presentation">
+                                                <a class="nav-link active" id="statistic-tab" data-bs-toggle="tab" href="#statistic" role="tab"
+                                                    aria-controls="statistic_tab" aria-selected="true">시간별 긍·부정 분포</a>
+                                            </li>
+                                            <li class="nav-item" role="presentation">
+                                                <a class="nav-link" id="wordcloud-tab" data-bs-toggle="tab" href="#wordcloud" role="tab"
+                                                    aria-controls="wordcloud_tab" aria-selected="false">워드클라우드</a>
+                                            </li>
+                                        </ul>
                                     </div>
-                                    <div class="card-body" style="display: block; height: 367px; overflow-y: scroll;">
-                                        <div id="area"></div>
+                                    <div class="card-body" style="display: block; height: 360px;">
+                                        <div class="tab-content" id="myTabContent2">
+                                            <div class="tab-pane fade show active" id="statistic" role="tabpanel" aria-labelledby="statistic_tab">
+                                                <div id="area"></div>        
+                                            </div>
+                                            <div class="tab-pane fade" id="wordcloud" role="tabpanel" aria-labelledby="wordcloud_tab">
+                                                <div id="wordcloud_area" style="height: 350px;"></div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -190,63 +206,120 @@
                             <div class="col-12">
                                 <div class="card">
                                     <div class="card-header" style="padding-bottom: 0;">
-                                        <h4>욕설, 혐오발언 유저</h4>
+                                        <ul class="nav nav-tabs" id="myTab" role="tablist">
+                                            <li class="nav-item" role="presentation">
+                                                <a class="nav-link active" id="home-tab" data-bs-toggle="tab" href="#hate_table" role="tab"
+                                                    aria-controls="hate_table" aria-selected="true">욕설, 혐오</a>
+                                            </li>
+                                            <li class="nav-item" role="presentation">
+                                                <a class="nav-link" id="profile-tab" data-bs-toggle="tab" href="#qa_table" role="tab"
+                                                    aria-controls="qa_table" aria-selected="false">Q&A</a>
+                                            </li>
+                                        </ul>
                                     </div>
                                     <div class="card-body" style="display: block; height: 280px; overflow-y: scroll;">
-                                        <div class="table-responsive">
-                                            <table class="table table-hover table-lg">
-                                                <thead>
-                                                    <tr>
-                                                        <th>Name</th>
-                                                        <th>Count</th>
-                                                        <th>Comment</th>
-                                                        <th>time</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody id='tbody-list'>
-                                                    <tr>
-                                                        <td class="col-2">
-                                                            <div class="d-flex align-items-center">
-                                                                <div class="avatar avatar-md">
-                                                                    <img src="{{ url_for('statics', path='/images/faces/5.jpg') }}">
+                                        <div class="tab-content" id="myTabContent">
+                                            <div class="tab-pane fade show active" id="hate_table" role="tabpanel" aria-labelledby="hate_table-tab">
+                                                <table class="table table-hover table-lg">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Name</th>
+                                                            <th>Count</th>
+                                                            <th>Comment</th>
+                                                            <th>time</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id='tbody-list-hate'>
+                                                        <tr>
+                                                            <td class="col-2">
+                                                                <div class="d-flex align-items-center">
+                                                                    <div class="avatar avatar-md">
+                                                                        <img src="{{ url_for('statics', path='/images/faces/5.jpg') }}">
+                                                                    </div>
+                                                                    <p class="font-bold ms-3 mb-0">Lee</p>
+                                                                    <span style="margin-left: 10px; cursor: pointer;" ondblclick="clickBan(this)"><i class="fas fa-ban"></i></span>
                                                                 </div>
-                                                                <p class="font-bold ms-3 mb-0">Lee</p>
-                                                                <!-- <span style="margin-left: 10px; cursor: pointer;" onclick="clickBan(this)"><i class="fas fa-ban"></i></span> -->
-                                                                <span style="margin-left: 10px; cursor: pointer;" ondblclick="clickBan(this)"><i class="fas fa-ban"></i></span>
-                                                            </div>
-                                                        </td>
-                                                        <td class="col-1">
-                                                            <p class="mb-0">3</p>
-                                                        </td>
-                                                        <td class="col-auto">
-                                                            <p class="mb-0">시발, 느금마, 제품 존나 별로다</p>
-                                                        </td>
-                                                        <td class="col-2">
-                                                            <p class="mb-0">2021-12-12 14:43</p>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td class="col-2">
-                                                            <div class="d-flex align-items-center">
-                                                                <div class="avatar avatar-md">
-                                                                    <img src="{{ url_for('statics', path='/images/faces/5.jpg') }}">
+                                                            </td>
+                                                            <td class="col-1">
+                                                                <p class="mb-0" style="margin-left: 18px;">3</p>
+                                                            </td>
+                                                            <td class="col-auto">
+                                                                <p class="mb-0">시발, 느금마, 제품 존나 별로다</p>
+                                                            </td>
+                                                            <td class="col-2">
+                                                                <p class="mb-0">2021-12-12 14:43</p>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="col-2">
+                                                                <div class="d-flex align-items-center">
+                                                                    <div class="avatar avatar-md">
+                                                                        <img src="{{ url_for('statics', path='/images/faces/5.jpg') }}">
+                                                                    </div>
+                                                                    <p class="font-bold ms-3 mb-0">Kim</p>
+                                                                    <span style="margin-left: 10px; cursor: pointer;" onclick="clickBan(this)"><i class="fas fa-ban"></i></span>
                                                                 </div>
-                                                                <p class="font-bold ms-3 mb-0">Kim</p>
-                                                                <span style="margin-left: 10px; cursor: pointer;" onclick="clickBan(this)"><i class="fas fa-ban"></i></span>
-                                                            </div>
-                                                        </td>
-                                                        <td class="col-1">
-                                                            <p class="mb-0">3</p>
-                                                        </td>
-                                                        <td class="col-auto">
-                                                            <p class="mb-0">살 좀 빼세요</p>
-                                                        </td>
-                                                        <td class="col-2">
-                                                            <p class="mb-0">2021-12-12 14:55</p>
-                                                        </td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
+                                                            </td>
+                                                            <td class="col-1">
+                                                                <p class="mb-0" style="margin-left: 18px;">3</p>
+                                                            </td>
+                                                            <td class="col-auto">
+                                                                <p class="mb-0">살 좀 빼세요</p>
+                                                            </td>
+                                                            <td class="col-2">
+                                                                <p class="mb-0">2021-12-12 14:55</p>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <div class="tab-pane fade" id="qa_table" role="tabpanel" aria-labelledby="qa_table-tab">
+                                                <table class="table table-hover table-lg">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Name</th>
+                                                            <th>Comment</th>
+                                                            <th>time</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id='tbody-list-qa'>
+                                                        <tr>
+                                                            <td class="col-2">
+                                                                <div class="d-flex align-items-center">
+                                                                    <div class="avatar avatar-md">
+                                                                        <img src="{{ url_for('statics', path='/images/faces/5.jpg') }}">
+                                                                    </div>
+                                                                    <p class="font-bold ms-3 mb-0">Lee</p>
+                                                                    <span style="margin-left: 10px; cursor: pointer;" ondblclick="clickBan(this)"><i class="fas fa-ban"></i></span>
+                                                                </div>
+                                                            </td>
+                                                            <td class="col-auto">
+                                                                <p class="mb-0">진동이 어느정도 세기인가요??</p>
+                                                            </td>
+                                                            <td class="col-2">
+                                                                <p class="mb-0">2021-12-12 14:43</p>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="col-2">
+                                                                <div class="d-flex align-items-center">
+                                                                    <div class="avatar avatar-md">
+                                                                        <img src="{{ url_for('statics', path='/images/faces/5.jpg') }}">
+                                                                    </div>
+                                                                    <p class="font-bold ms-3 mb-0">Kim</p>
+                                                                    <span style="margin-left: 10px; cursor: pointer;" onclick="clickBan(this)"><i class="fas fa-ban"></i></span>
+                                                                </div>
+                                                            </td>
+                                                            <td class="col-auto">
+                                                                <p class="mb-0">몇시간정도 연속으로 사용가능한가요?</p>
+                                                            </td>
+                                                            <td class="col-2">
+                                                                <p class="mb-0">2021-12-12 14:55</p>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -283,7 +356,9 @@
     <script src="{{ url_for('statics', path='/js/extensions/sweetalert2.js') }}"></script>
     <script src="{{ url_for('statics', path='/vendors/sweetalert2/sweetalert2.all.min.js') }}"></script>
 
-    
+    <script src="https://cdn.anychart.com/releases/v8/js/anychart-base.min.js"></script>
+    <script src="https://cdn.anychart.com/releases/v8/js/anychart-tag-cloud.min.js"></script>
+
     <script type='text/javascript'>
 
         // dictionary of hate speech {'user': ['hate comment']}
@@ -341,6 +416,25 @@
 
                     if(data.is_question){
                         text_html = '<h5 class="mb-1">' + '<i class="fas fa-question-circle"></i> ' + data.text + '</h5>';
+                        qa_html = ''
+                        qa_html += '<tr>'
+                        qa_html += '<td class="col-2">'
+                        qa_html += '<div class="d-flex align-items-center">'
+                        qa_html += '<div class="avatar avatar-md">'
+                        qa_html += '<img src=\'{{ url_for("statics", path="/images/faces/5.jpg") }}\'>'
+                        qa_html += '</div>'
+                        qa_html += '<p class="font-bold ms-3 mb-0">' + data.user_id + '</p>'
+                        qa_html += '</div>'
+                        qa_html += '</td>'
+                        qa_html += '<td class="col-auto">'
+                        qa_html += '<p class="mb-0">' + data.text + '</p>'
+                        qa_html += '</td>'
+                        qa_html += '<td class="col-2">'
+                        qa_html += '<p class="mb-0">' + data.time + '</p>'
+                        qa_html += '</td>'
+                        qa_html += '</tr>'
+
+                        $('#tbody-list-qa').append(qa_html)
                     } else {
                         // Case 별로 분류하기
                         // 1. 감성글 여부 판단 -> 그래프에 반영
@@ -428,7 +522,7 @@
         function redrawCommentList(){
             const mapSort = new Map([...hate_speech_dict.entries()].sort((a, b) => b[1].length - a[1].length));
 
-            $('#tbody-list').empty()
+            $('#tbody-list-hate').empty()
             
             for(let item of mapSort){
                 html = ''
@@ -443,7 +537,7 @@
                 html += '</div>'
                 html += '</td>'
                 html += '<td class="col-1">'
-                html += '<p class="mb-0">' + item[1].length + '</p>'
+                html += '<p class="mb-0" style="margin-left: 18px;">' + item[1].length + '</p>'
                 html += '</td>'
                 html += '<td class="col-auto">'
                 html += '<p class="mb-0">' + item[1][item[1].length-1][0] + '</p>'
@@ -453,7 +547,7 @@
                 html += '</td>'
                 html += '</tr>'
 
-                $('#tbody-list').append(html)
+                $('#tbody-list-hate').append(html)
 
             }
         }
@@ -497,6 +591,25 @@
             })
         }
 
+        // 워드 클라우드 그리기
+        function drawWordCloud(data){
+            // 백단으로부터 데이터 로드하는 기능 필요
+            var data = [ 
+                { "x": "IT", "value": 590000000, category: "Sino-Tibetan" }, 
+                { "x": "Python", "value": 283000000, category: "Indo-European" }, 
+                { "x": "소프트웨어", "value": 544000000, category: "Indo-European" }, 
+                { "x": "JAVA", "value": 527000000, category: "Indo-European" }, 
+                { "x": "C++", "value": 422000000, category: "Afro-Asiatic" }, 
+                { "x": "HTML", "value": 620000000, category: "Afro-Asiatic" } 
+            ];
+            
+            var chart = anychart.tagCloud(data);
+            
+            chart.angles([0]);
+            chart.container("wordcloud_area");
+            chart.draw();
+        }
+
         $(document).ready(function () {
             console.log('chatting page opened!!')
 
@@ -530,6 +643,11 @@
                         },
                     ], true)
             }, 10000);
+
+            // 리로드 배치 추가 필요
+            drawWordCloud()
+
+
         });
 
     </script>
