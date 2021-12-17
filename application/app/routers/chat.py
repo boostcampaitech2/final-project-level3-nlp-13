@@ -125,7 +125,7 @@ def sendMessage(comments: Comments):
 
     # 부정이고 욕설이면 최종으로 욕설로 판단
     if senti_inference_result == NEGATIVE and is_beep(beep_inference_result):
-        beep_inference_result = OFFENSIVE
+        beep_inference_result = HATE
         preprocessed_text = '모델에 의해 제거된 채팅입니다.'
 
     # 4. 댓글 판단 결과 저장
