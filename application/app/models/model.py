@@ -52,7 +52,6 @@ def predict_from_text(
     probabilities = torch.softmax(pred['logits'].detach(), dim=1)
     classes = torch.argmax(probabilities).item()
     confidence = torch.max(probabilities).item()
-    print(classes, confidence)
     return classes, confidence
 
 def make_inference(
@@ -72,10 +71,10 @@ def make_inference(
         Summary:
             유저의 채팅 내용, 모델, 토크나이저를 입력받아 모델에 따른 분석결과를 반환
     '''
-    #try:
-    inference_result, confidence = predict_from_text(model=model, tokenizer=tokenizer, text=text)
-    #except:
+    try:
+        inference_result, confidence = predict_from_text(model=model, tokenizer=tokenizer, text=text)
+    except:
         #raise HTTPException(status_code=404, detail=f"예측과정에서 오류가 발생했습니다. [text: {text}]")\
-        #print(f"예측과정에서 오류가 발생했습니다. [text: {text}]")
+        print(f"예측과정에서 오류가 발생했습니다. [text: {text}]")
 
     return inference_result, confidence

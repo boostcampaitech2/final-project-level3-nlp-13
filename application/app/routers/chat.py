@@ -103,13 +103,13 @@ def sendMessage(comments: Comments):
     senti_inference_result, senti_confidence = make_inference(preprocessed_text, senti_model, senti_tokenizer)
 
         # 결과 class 및 confidence에 따른 class 변경
-    if not is_positive(senti_inference_result, senti_confidence, float(res['confidence'])):
+    if not is_positive(senti_inference_result, senti_confidence, float(res['confidence'])/100):
         senti_inference_result = ClassType.NORMAL
 
         # 결과 저장
     res['label_senti'] = senti_inference_result
     res['confidence_senti'] = senti_confidence
-
+    print(senti_inference_result, senti_confidence, f'text:{res["text"]}', f'base:{float(res["confidence"])}')
         # Word cloud 업데이트
     if senti_inference_result == ClassType.NEGATIVE:
         update_wc(res['text'], neg_word_cloud_dict)
@@ -126,7 +126,7 @@ def sendMessage(comments: Comments):
         beep_inference_result, beep_confidence = make_inference(preprocessed_text, beep_model, beep_tokenizer)
     
     # 욕설이 아니면 질문으로 분류
-    _is_beep = is_beep(beep_inference_result, beep_confidence, float(res['confidence']))
+    _is_beep = is_beep(beep_inference_result, beep_confidence, float(res['confidence'])/100)
     if not _is_beep:
         beep_inference_result = ClassType.NORMAL
         if is_FAQ(preprocessed_text):
