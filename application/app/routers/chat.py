@@ -60,10 +60,9 @@ def init():
     
     # 2. 감성 모델 로딩
     if senti_model is None:
-        senti_model = get_model(model_kind='beep_best.bin', numlabels=3)
-        #senti_model = get_model(model_kind='senti_best.pt', numlabels=2, model_name='monologg/koelectra-small-v3-discriminator')
+        senti_model = get_model(model_kind='senti_best.bin', numlabels=2, model_name='monologg/koelectra-small-v3-discriminator')
     if senti_tokenizer is None:
-        senti_tokenizer = get_tokenizer()#model_name='monologg/koelectra-small-v3-discriminator'
+        senti_tokenizer = get_tokenizer(model_name='monologg/koelectra-small-v3-discriminator')
 
     # 3. 각종 사전 로딩
         # 욕설, 인사, 질문 등
@@ -105,9 +104,9 @@ def sendMessage(comments: Comments):
     senti_inference_result, senti_confidence = make_inference(preprocessed_text, senti_model, senti_tokenizer)
         # To Do.
             # 결과 class 및 confidence에 따른 class 변경
-    if not is_positive(senti_inference_result, senti_confidence):
-        senti_inference_result = NORMAL
-
+    # if not is_positive(senti_inference_result, senti_confidence):
+    #     senti_inference_result = NORMAL
+    print(senti_inference_result, senti_confidence, f'preprocessed_text: {preprocessed_text}')
     # 3. 악성 분석
         # 3-1. 직접적 욕설 포함?
     if False:
