@@ -1,4 +1,7 @@
+from typing import Dict
+
 import re
+from konlpy.tag import Mecab
 
 HATE = 1
 OFFENSIVE = 0
@@ -31,3 +34,10 @@ def is_positive(label:int, confidence:float):
     if label == NEGATIVE and confidence >= 0.85:
         return True
     return False
+
+def update_wc(input_text: str, word_cloud_dict:Dict):
+    mecab = Mecab()
+    for n in mecab.nouns(input_text):
+        word_cloud_dict[n] += 1
+
+    

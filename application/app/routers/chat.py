@@ -11,9 +11,9 @@ from typing import Optional
 
 from datetime import date, datetime
 from app.models.model import get_model, get_tokenizer, make_inference
-from app.services.utills import is_FAQ, is_greeting, is_beep, is_positive
+from app.services.utills import is_FAQ, is_greeting, is_beep, is_positive, update_wc
 
-from transformers import AutoModelForSequenceClassification, AutoTokenizer
+from collections import defaultdict
 
 HATE = 1
 OFFENSIVE = 0
@@ -41,6 +41,9 @@ beep_model = None
 beep_tokenizer = None
 senti_model = None
 senti_tokenizer = None
+
+pos_word_cloud_dict = defaultdict(int)
+neg_word_cloud_dict = defaultdict(int)
 
 @router.on_event("startup")
 def init():
@@ -126,7 +129,8 @@ def sendMessage(comments: Comments):
     # 부정이고 욕설이면 최종으로 욕설로 판단
     if senti_inference_result == NEGATIVE and is_beep(beep_inference_result):
         beep_inference_result = HATE
-        preprocessed_text = '모델에 의해 제거된 채팅입니다.'
+        # 지우고
+        #preprocessed_text = '모델에 의해 제거된 채팅입니다.'
 
     # 4. 댓글 판단 결과 저장
     res['label_senti'] = senti_inference_result
@@ -137,6 +141,11 @@ def sendMessage(comments: Comments):
     # 5. 판단 결과에 따라 post_processing
     res['text'] = preprocessed_text # 부적절한 채팅입니다.
 
+    if senti_inference_result == NEGATIVE:
+        update_wc(res['text'], neg_word_cloud_dict)
+    elif senti_inference_result == POSITIVE:
+        update_wc(res['text'], pos_word_cloud_dict)
+
     return JSONResponse(res)
 
 @router.post("/loadSampleLog")
@@ -145,5 +154,14 @@ def loadSampleLog():
     df = pd.read_csv('files/sample_log.csv')
 
     res['comments'] = df.to_dict('records')
+
+    return JSONResponse(res)
+
+@router.post("/getWC")
+def get_wc():
+    res = dict()    
+    pos_json = [{"x":noun, "value":freq, "category":"pos"} for noun, freq in pos_word_cloud_dict.items()]
+    neg_json = [{"x":noun, "value":freq, "category":"neg"} for noun, freq in neg_word_cloud_dict.items()]
+    res['data'] = pos_json + neg_json
 
     return JSONResponse(res)
