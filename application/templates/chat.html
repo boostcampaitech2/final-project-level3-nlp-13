@@ -432,7 +432,7 @@
                         qa_html += '</td>'
                         qa_html += '</tr>'
 
-                        $('#tbody-list-qa').append(qa_html)
+                        $('#tbody-list-qa').prepend(qa_html)
                     } else {
                         // Case 별로 분류하기
                         // 1. 감성글 여부 판단 -> 그래프에 반영
@@ -452,7 +452,7 @@
                         // 2. 욕설 글 판단
                         //  2.1) 리스트에 추가
                         //  2.2) 채팅창 출력값 변경
-                        if(data.label_beep == 1) {
+                        if(data.label_beep == 1 && data.label_senti == 0) {
                             text_html = '<h5 class="mb-1 attack_word">부적절한 표현입니다.</h5>'
                             is_hate_or_neg = true
                         }
@@ -590,22 +590,34 @@
         }
 
         // 워드 클라우드 그리기
-        function drawWordCloud(data){
+        function drawWordCloud(){
+            setInterval(function() {
             // 백단으로부터 데이터 로드하는 기능 필요
-            var data = [ 
-                { "x": "IT", "value": 590000000, category: "Sino-Tibetan" }, 
-                { "x": "Python", "value": 283000000, category: "Indo-European" }, 
-                { "x": "소프트웨어", "value": 544000000, category: "Indo-European" }, 
-                { "x": "JAVA", "value": 527000000, category: "Indo-European" }, 
-                { "x": "C++", "value": 422000000, category: "Afro-Asiatic" }, 
-                { "x": "HTML", "value": 620000000, category: "Afro-Asiatic" } 
-            ];
+                console.log('drawwordcloud')
+                $.ajax({
+                    url: '/chat/getWC',
+                    type: 'POST',
+                    data: JSON.stringify({}),
+                    dataType: "json",
+                    contentType: "application/json",
+                    success: function(data) {
+                        $('#wordcloud_area').empty()
+                        console.log('get data =====')
+                        console.log(data)
+
+                        var customColorScale = anychart.scales.ordinalColor();
+                        customColorScale.colors(['#55c6e8', '#FFCDD2']);
+                
+                        var chart = anychart.tagCloud(data.data);
+                        chart.colorScale(customColorScale);
+
+                        chart.angles([0]);
+                        chart.container("wordcloud_area");
+                        chart.draw();
+                    }
+                })    
+            }, 10000);
             
-            var chart = anychart.tagCloud(data);
-            
-            chart.angles([0]);
-            chart.container("wordcloud_area");
-            chart.draw();
         }
 
         $(document).ready(function () {
@@ -620,10 +632,10 @@
 
             loadSampleLog()
             redrawCommentList()
+            drawWordCloud()
 
             var idx = 0
             setInterval(function() {
-                console.log('idx : ' + idx);
                 idx++
                 last_time = areaPosData[areaPosData.length-1]['x']
                 // Math.random() * (max - min) + min;
@@ -641,10 +653,6 @@
                         },
                     ], true)
             }, 10000);
-
-            // 리로드 배치 추가 필요
-            drawWordCloud()
-
 
         });
 

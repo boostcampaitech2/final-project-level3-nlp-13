@@ -27,6 +27,8 @@ Jinja2 = "3.0.2"
 Markdown = "3.3.4"
 pytest = "6.2.5"
 loguru = "^0.5.3"
+konlpy = "^0.5.2"
+tweepy = "3.10.0"
 
 [tool.poetry.dev-dependencies]
 

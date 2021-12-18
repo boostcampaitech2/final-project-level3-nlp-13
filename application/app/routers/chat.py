@@ -1,4 +1,5 @@
 from typing import *
+import json
 from fastapi import Request, Form, APIRouter, HTTPException
 import pandas as pd
 
@@ -11,15 +12,10 @@ from typing import Optional
 
 from datetime import date, datetime
 from app.models.model import get_model, get_tokenizer, make_inference
-from app.services.utills import is_FAQ, is_greeting, is_beep, is_positive
+from app.services.utills import is_FAQ, is_greeting, is_beep, is_positive, update_wc, check_beep_dictionary
+from app.services.utills import ClassType
 
-from transformers import AutoModelForSequenceClassification, AutoTokenizer
-
-HATE = 1
-OFFENSIVE = 0
-POSITIVE = 1
-NEGATIVE = 0
-NORMAL = 2
+from collections import defaultdict
 
 class Comments(BaseModel):
     user_id: str = Field(default=str)
@@ -42,6 +38,10 @@ beep_tokenizer = None
 senti_model = None
 senti_tokenizer = None
 
+beep_dic = defaultdict(str)
+pos_word_cloud_dict = defaultdict(int)
+neg_word_cloud_dict = defaultdict(int)
+
 @router.on_event("startup")
 def init():
     '''
@@ -49,7 +49,7 @@ def init():
             초기 실행시, 필요한 모델과 토크나이저 및 dictionary들 로딩
     '''
     # 1. 악성 모델 로딩
-    global beep_model, beep_tokenizer, senti_model, senti_tokenizer
+    global beep_model, beep_tokenizer, senti_model, senti_tokenizer, beep_dic
     if beep_model is None:
         beep_model = get_model(model_kind='beep_best.bin', numlabels=3)
     if beep_tokenizer is None:
@@ -57,13 +57,14 @@ def init():
     
     # 2. 감성 모델 로딩
     if senti_model is None:
-        senti_model = get_model(model_kind='beep_best.bin', numlabels=3)
-        #senti_model = get_model(model_kind='senti_best.pt', numlabels=2, model_name='monologg/koelectra-small-v3-discriminator')
+        senti_model = get_model(model_kind='senti_best.bin', numlabels=2, model_name='monologg/koelectra-small-v3-discriminator')
     if senti_tokenizer is None:
-        senti_tokenizer = get_tokenizer()#model_name='monologg/koelectra-small-v3-discriminator'
+        senti_tokenizer = get_tokenizer(model_name='monologg/koelectra-small-v3-discriminator')
 
     # 3. 각종 사전 로딩
-        # 욕설, 인사, 질문 등
+    with open('files/abuse_voca.json') as f:
+        data = json.load(f)
+    beep_dic = pd.DataFrame(data)['badwords'].tolist()
 
 @router.get("/", response_class=HTMLResponse)
 async def index(request: Request):
@@ -100,42 +101,45 @@ def sendMessage(comments: Comments):
 
     # 2. 감성 분석
     senti_inference_result, senti_confidence = make_inference(preprocessed_text, senti_model, senti_tokenizer)
-        # To Do.
-            # 결과 class 및 confidence에 따른 class 변경
-    if not is_positive(senti_inference_result, senti_confidence):
-        senti_inference_result = NORMAL
+
+        # 결과 class 및 confidence에 따른 class 변경
+    if not is_positive(senti_inference_result, senti_confidence, float(res['confidence'])/100):
+        senti_inference_result = ClassType.NORMAL
+
+        # 결과 저장
+    res['label_senti'] = senti_inference_result
+    res['confidence_senti'] = senti_confidence
+    print(senti_inference_result, senti_confidence, f'text:{res["text"]}', f'base:{float(res["confidence"])}')
+        # Word cloud 업데이트
+    if senti_inference_result == ClassType.NEGATIVE:
+        update_wc(res['text'], neg_word_cloud_dict)
+    elif senti_inference_result == ClassType.POSITIVE:
+        update_wc(res['text'], pos_word_cloud_dict)
 
     # 3. 악성 분석
         # 3-1. 직접적 욕설 포함?
-    if False:
-        # To Do.
-            # preprocessed_text 알맞은 형태로 변경 
-        print("직접적인 욕설이 있음")
+    if check_beep_dictionary(preprocessed_text, beep_dic):
+        res['label_beep'] = ClassType.HATE
+        res['confidence_beep'] = 1.0
+        return JSONResponse(res) 
     else:
         beep_inference_result, beep_confidence = make_inference(preprocessed_text, beep_model, beep_tokenizer)
-        # To Do.
-            # 결과 class 및 confidence에 따른 class 변경
     
     # 욕설이 아니면 질문으로 분류
-    if not is_beep(beep_inference_result):
+    _is_beep = is_beep(beep_inference_result, beep_confidence, float(res['confidence'])/100)
+    if not _is_beep:
+        beep_inference_result = ClassType.NORMAL
         if is_FAQ(preprocessed_text):
             # FAQ 따로 저장
             res['is_question'] = True
             return JSONResponse(res)
-
+    
     # 부정이고 욕설이면 최종으로 욕설로 판단
-    if senti_inference_result == NEGATIVE and is_beep(beep_inference_result):
-        beep_inference_result = OFFENSIVE
-        preprocessed_text = '모델에 의해 제거된 채팅입니다.'
+    if senti_inference_result == ClassType.NEGATIVE and _is_beep:
+        beep_inference_result = ClassType.HATE
 
-    # 4. 댓글 판단 결과 저장
-    res['label_senti'] = senti_inference_result
     res['label_beep'] = beep_inference_result
-    res['confidence_senti'] = senti_confidence
     res['confidence_beep'] = beep_confidence
- 
-    # 5. 판단 결과에 따라 post_processing
-    res['text'] = preprocessed_text # 부적절한 채팅입니다.
 
     return JSONResponse(res)
 
@@ -146,4 +150,13 @@ def loadSampleLog():
 
     res['comments'] = df.to_dict('records')
 
+    return JSONResponse(res)
+
+@router.post("/getWC")
+def get_wc():
+    res = dict()    
+    pos_json = [{"x":noun, "value":freq, "category":"pos"} for noun, freq in pos_word_cloud_dict.items()]
+    neg_json = [{"x":noun, "value":freq, "category":"neg"} for noun, freq in neg_word_cloud_dict.items()]
+    res['data'] = pos_json + neg_json
+    print(res['data'])
     return JSONResponse(res)

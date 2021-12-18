@@ -49,8 +49,9 @@ def predict_from_text(
         add_special_tokens=True,
     )
     pred = model(input_ids = inputs['input_ids'].to(device))
-    classes = torch.argmax(pred['logits'].detach()).detach().item()
-    confidence = torch.max(pred['logits'].detach()).detach().item()
+    probabilities = torch.softmax(pred['logits'].detach(), dim=1)
+    classes = torch.argmax(probabilities).item()
+    confidence = torch.max(probabilities).item()
     return classes, confidence
 
 def make_inference(
