@@ -1,9 +1,7 @@
 import logging
 import pytz
-import logging
 import datetime
-
-from glob import glob
+import os
 
 class Formatter(logging.Formatter):
     """override logging.Formatter to use an aware datetime object"""
@@ -30,7 +28,12 @@ def set_logger():
         summary
             - 로깅 객체 및 포맷 정의
     '''
-    file_name = 'logs/' + str(datetime.datetime.now()) + '.txt'
+    file_name = 'logs/' + str(datetime.datetime.now()) + '.log'
+    
+    if not os.path.exists(file_name):
+        with open(file_name, 'w') as f:
+            pass
+    
     logging.basicConfig(filename=file_name, level=logging.INFO)
     mylogger = logging.getLogger("process")
     mylogger.setLevel(logging.INFO)

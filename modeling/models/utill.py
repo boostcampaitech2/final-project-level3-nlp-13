@@ -1,7 +1,8 @@
 from typing import *
-
-import torch
-from transformers import AutoConfig, AutoModelForSequenceClassification, AutoTokenizer
+from models.custom import CustomForSequenceClassification
+import torch.nn as nn
+from transformers import AutoConfig, AutoModelForSequenceClassification, AutoModel
+from transformers import AutoTokenizer
 from transformers import PreTrainedTokenizerFast
 
 def get_model(
@@ -34,10 +35,10 @@ def get_model(
          model = AutoModelForSequenceClassification.from_pretrained(model_name, config=model_config)
          #state_dicts = torch.load(model_name + '/pytorch_model.bin')
          #model.load_state_dict(state_dicts)
-    elif model_type == 'custom':
-        print(num_classes, model_name)
-    
-
+    elif model_type == 'cnn-head':
+        model_config = AutoConfig.from_pretrained(model_name)
+        model_config.num_labels = num_classes    
+        model = CustomForSequenceClassification.from_pretrained(model_name, config=model_config)
     return model
 
 def get_tokenizer(
@@ -62,7 +63,7 @@ def get_tokenizer(
     if tokenizer_type == 'huggingface':
         tokenizer = AutoTokenizer.from_pretrained(tokenizer_name)
     elif tokenizer_type == 'char_level':
-        tokenizer = PreTrainedTokenizerFast(tokenizer_file="/opt/ml/trained_tok/vocab.json")
+        tokenizer = PreTrainedTokenizerFast(tokenizer_file="outputs/char_lv_pre_trained/vocab.json")
         tokenizer.bos_token="[SOS]"
         tokenizer.eos_token="[EOS]"
         tokenizer.sep_token="[SEP]"
@@ -90,3 +91,5 @@ def get_optimizer(
             옵티마이저 반환
     '''
     print('아직 미사용')
+
+

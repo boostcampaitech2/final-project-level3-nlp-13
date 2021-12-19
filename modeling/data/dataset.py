@@ -1,12 +1,11 @@
 from typing import *
 from torch.utils.data import Dataset
+import torch
 from transformers import AutoTokenizer
 import pandas as pd
 import os
 
 from data.preprocessing import del_stopword
-
-#DATA_PATH = "../dataset/"
 
 class DatasetForHateSpeech(Dataset):
     def __init__(
@@ -37,18 +36,39 @@ class DatasetForHateSpeech(Dataset):
         self.tokenized_data = tokenizer(
             self.data['comments'].tolist(),#Sentence
             return_tensors="pt",
+            return_token_type_ids=False,
             padding=True,
             truncation=True,
-            max_length=256,
+            max_length=50,
             add_special_tokens=True,
         )
         self.labels = self.data['label'].tolist()
 
     def __getitem__(self, idx):
         item = {key: val[idx] for key, val in self.tokenized_data.items()}
-        item['labels'] = self.labels[idx]
+        item['labels'] = torch.tensor(self.labels[idx])
         return item
 
     def __len__(self):
         return len(self.data)
 
+class CurriculumDataset(Dataset):
+    def __init__(self, data, tokenizer):
+        self.data = data
+        self.tokenizer= tokenizer
+        self.tokenized_text = tokenizer(
+            self.data['comments'].tolist(),
+            max_length = 50,
+            padding=True,
+            truncation=True,
+            return_tensors='pt',
+            return_token_type_ids=False
+        )
+    def __getitem__(self, idx):
+        return {
+            "input_ids" : self.tokenized_text['input_ids'][idx],
+            "attention_mask" : self.tokenized_text['attention_mask'][idx]
+        }, torch.tensor(self.data['label'].tolist()[idx])
+
+    def __len__(self):
+        return len(self.data)
