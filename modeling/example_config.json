@@ -1,0 +1,45 @@
+{
+    "data": {
+        "train_data_path" : "dataset/",
+        "train_data_version" : "v4",
+        "valid_data_path" : "dataset/",
+        "valid_data_version" : "v4",
+        "test_data_path" : "dataset/",
+        "test_data_version" : "v4",
+        "preprocessing" : "None"
+    },
+    "model": {
+        "model_name": "beomi/KcELECTRA-base",
+        "model_type": "cnn-head",
+        "num_classes": 2
+    },
+    "tokenizer": {
+        "tokenizer_name": "beomi/KcELECTRA-base",
+        "tokenizer_type": "huggingface"
+    },
+    "train":{
+        "epochs" : 10,
+        "learning_rate": 5e-5,
+        "save_total_limit": 2,
+        "save_strategy": "epoch",
+        "evaluation_strategy": "epoch",
+        "train_batch_size": 64,
+        "eval_batch_size" : 64,
+        "warm_up_step" : 500,
+        "weight_decay" : 1e-5,
+        "report": "wandb",
+        "load_best_model_at_end": true,
+        "do_train" : true,
+        "do_eval" : true
+    },
+    "test":{
+        "do_test" : true
+    },
+    "output": {
+        "model_save_dir": "./outputs/finetuning-cnn-heads-offensive/",
+        "result_save_path": "./outputs/results/"
+    },
+    "wandb": {
+        "run_name": "data v4 add cnn heads"
+    }
+}
