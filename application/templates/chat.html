@@ -69,18 +69,6 @@
                             </div>
                             <div class="card-content pb-4">
                                 <div id="chattingBox" class="px-4" style="height: 535px; overflow-y: scroll;">
-                                    <div class="name ms-4">
-                                        <h6 class="text-muted mb-0">@동긔 - 14:56</h6>
-                                        <h5 class="mb-1">상품이 아주 마음에 듭니다!</h5>
-                                    </div>
-                                    <div class="name ms-4">
-                                        <h6 class="text-muted mb-0">@슈가 - 14:57</h6>
-                                        <h5 class="mb-1 attack_word">부적절한 표현입니다.</h5>
-                                    </div>
-                                    <div class="name ms-4">
-                                        <h6 class="text-muted mb-0">@픠케 - 15:00  <button>신고</button></h6>
-                                        <h5 class="mb-1">이거 사용해봤는데 진짜 별로에요...</h5>
-                                    </div>
                                 </div>
                                 <div class="px-4">
                                     <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
@@ -211,7 +199,7 @@
                                             </li>
                                             <li class="nav-item" role="presentation">
                                                 <a class="nav-link" id="profile-tab" data-bs-toggle="tab" href="#qa_table" role="tab"
-                                                    aria-controls="qa_table" aria-selected="false">Q&A</a>
+                                                    aria-controls="qa_table" aria-selected="false">FAQ</a>
                                             </li>
                                         </ul>
                                     </div>
@@ -228,46 +216,6 @@
                                                         </tr>
                                                     </thead>
                                                     <tbody id='tbody-list-hate'>
-                                                        <tr>
-                                                            <td class="col-2">
-                                                                <div class="d-flex align-items-center">
-                                                                    <div class="avatar avatar-md">
-                                                                        <img src="{{ url_for('statics', path='/images/faces/5.jpg') }}">
-                                                                    </div>
-                                                                    <p class="font-bold ms-3 mb-0">Lee</p>
-                                                                    <span style="margin-left: 10px; cursor: pointer;" ondblclick="clickBan(this)"><i class="fas fa-ban"></i></span>
-                                                                </div>
-                                                            </td>
-                                                            <td class="col-1">
-                                                                <p class="mb-0" style="margin-left: 18px;">3</p>
-                                                            </td>
-                                                            <td class="col-auto">
-                                                                <p class="mb-0">시발, 느금마, 제품 존나 별로다</p>
-                                                            </td>
-                                                            <td class="col-2">
-                                                                <p class="mb-0">2021-12-12 14:43</p>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="col-2">
-                                                                <div class="d-flex align-items-center">
-                                                                    <div class="avatar avatar-md">
-                                                                        <img src="{{ url_for('statics', path='/images/faces/5.jpg') }}">
-                                                                    </div>
-                                                                    <p class="font-bold ms-3 mb-0">Kim</p>
-                                                                    <span style="margin-left: 10px; cursor: pointer;" onclick="clickBan(this)"><i class="fas fa-ban"></i></span>
-                                                                </div>
-                                                            </td>
-                                                            <td class="col-1">
-                                                                <p class="mb-0" style="margin-left: 18px;">3</p>
-                                                            </td>
-                                                            <td class="col-auto">
-                                                                <p class="mb-0">살 좀 빼세요</p>
-                                                            </td>
-                                                            <td class="col-2">
-                                                                <p class="mb-0">2021-12-12 14:55</p>
-                                                            </td>
-                                                        </tr>
                                                     </tbody>
                                                 </table>
                                             </div>
@@ -281,40 +229,6 @@
                                                         </tr>
                                                     </thead>
                                                     <tbody id='tbody-list-qa'>
-                                                        <tr>
-                                                            <td class="col-2">
-                                                                <div class="d-flex align-items-center">
-                                                                    <div class="avatar avatar-md">
-                                                                        <img src="{{ url_for('statics', path='/images/faces/5.jpg') }}">
-                                                                    </div>
-                                                                    <p class="font-bold ms-3 mb-0">Lee</p>
-                                                                    <span style="margin-left: 10px; cursor: pointer;" ondblclick="clickBan(this)"><i class="fas fa-ban"></i></span>
-                                                                </div>
-                                                            </td>
-                                                            <td class="col-auto">
-                                                                <p class="mb-0">진동이 어느정도 세기인가요??</p>
-                                                            </td>
-                                                            <td class="col-2">
-                                                                <p class="mb-0">2021-12-12 14:43</p>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="col-2">
-                                                                <div class="d-flex align-items-center">
-                                                                    <div class="avatar avatar-md">
-                                                                        <img src="{{ url_for('statics', path='/images/faces/5.jpg') }}">
-                                                                    </div>
-                                                                    <p class="font-bold ms-3 mb-0">Kim</p>
-                                                                    <span style="margin-left: 10px; cursor: pointer;" onclick="clickBan(this)"><i class="fas fa-ban"></i></span>
-                                                                </div>
-                                                            </td>
-                                                            <td class="col-auto">
-                                                                <p class="mb-0">몇시간정도 연속으로 사용가능한가요?</p>
-                                                            </td>
-                                                            <td class="col-2">
-                                                                <p class="mb-0">2021-12-12 14:55</p>
-                                                            </td>
-                                                        </tr>
                                                     </tbody>
                                                 </table>
                                             </div>
@@ -330,7 +244,7 @@
             <footer>
                 <div class="footer clearfix mb-0 text-muted">
                     <div class="float-start">
-                        <p>2021 &copy; Mazer</p>
+                        <p>2021 &copy; Team-Clue</p>
                     </div>
                     <div class="float-end">
                         <p>Crafted with <span class="text-danger"><i class="bi bi-heart"></i></span> by <a
@@ -361,25 +275,15 @@
 
         // dictionary of hate speech {'user': ['hate comment']}
         var hate_speech_dict = new Map();
-        hate_speech_dict.set('Lee', [['hmm.. u r so stupid...', '2021-12-12 14:43']]);
-        hate_speech_dict.set('Kim', [['what the fuck!', '2021-12-12 14:50'], ['got damn it..', '2021-12-12 15:43']]);
 
         var totalCommentCnt = 0
         var positiveCommentCnt = 0
         var negativeCommentCnt = 0
         var areaPosData = [
-			{x: 5, y: 100},
-			{x: 10, y: 110},
-			{x: 15, y: 140},
-			{x: 20, y: 120},
-			{x: 25, y: 90}
+			{x: 5, y: 0},
 		]
         var areaNegData = [
-			{x: 5, y: 30},
-			{x: 10, y: 20},
-			{x: 15, y: 50},
-			{x: 20, y: 20},
-			{x: 25, y: 10}
+			{x: 5, y: 0}
 		]
 
         function is_valid(){
@@ -394,7 +298,6 @@
             if(!is_valid()){ return }
 
             sendMessage($('#userId').val(), $('#exampleFormControlTextarea1').val(), false)
-
         });
 
         function sendMessage(user_id, text, auto) {
@@ -413,7 +316,7 @@
                     text_html = '<h5 class="mb-1">' + data.text + '</h5>'
 
                     if(data.is_question){
-                        text_html = '<h5 class="mb-1">' + '<i class="fas fa-question-circle"></i> ' + data.text + '</h5>';
+                        text_html = '<h5 class="mb-1">' + '<i class="fas fa-question-circle"></i> <span style="background-color:aqua;">' + data.text + '</span></h5>';
                         qa_html = ''
                         qa_html += '<tr>'
                         qa_html += '<td class="col-2">'
@@ -432,7 +335,7 @@
                         qa_html += '</td>'
                         qa_html += '</tr>'
 
-                        $('#tbody-list-qa').prepend(qa_html)
+                        $('#tbody-list-qa').append(qa_html)
                     } else {
                         // Case 별로 분류하기
                         // 1. 감성글 여부 판단 -> 그래프에 반영
@@ -441,10 +344,12 @@
                         if(data.label_senti == 1) {
                             positiveCommentCnt++;
                             totalCommentCnt++;
+                            temp_pos++;
                             areaPosData[areaPosData.length-1]['y'] += 1
                         } else if(data.label_senti == 0){
                             negativeCommentCnt++;
                             totalCommentCnt++;
+                            temp_neg++;
                             areaNegData[areaNegData.length-1]['y'] += 1
                             is_hate_or_neg = true
                         }
@@ -452,10 +357,13 @@
                         // 2. 욕설 글 판단
                         //  2.1) 리스트에 추가
                         //  2.2) 채팅창 출력값 변경
-                        if(data.label_beep == 1 && data.label_senti == 0) {
+                        if(data.label_beep == 1) {
                             text_html = '<h5 class="mb-1 attack_word">부적절한 표현입니다.</h5>'
                             is_hate_or_neg = true
                         }
+                        // } else if (data.label_beep == 2) {
+                        //     text_html = '<h5 class="mb-1">' + '<i style="color:red;" class="fas fa-angry"></i> ' + data.text + '</h5>';
+                        // }
 
                         if (is_hate_or_neg){
 
@@ -477,16 +385,19 @@
                     html += '</div>';
 
                     $('#chattingBox').append(html);
-                    $('#chattingBox').scrollTop(100000)
+                    $('#chattingBox').scrollTop(1000000)
                     
                     if(!auto){
                         $('#exampleFormControlTextarea1').val('');
                     }
                     
-                    chartVisitorsProfile.updateSeries(
-                        [positiveCommentCnt/totalCommentCnt
-                        , negativeCommentCnt/totalCommentCnt], true
-                    );
+                    if (data.label_senti != 2){
+                        chartVisitorsProfile.updateSeries(
+                            [positiveCommentCnt/totalCommentCnt
+                            , negativeCommentCnt/totalCommentCnt], true
+                        );
+                    }
+                    
                 },
             });
         }
@@ -567,9 +478,12 @@
             $("#amount").val(max + "%");
         });
 
-        // load_sample_log()
+        // 샘플 데이터 로드 및 뿌리기
+        sample_data_list = {};
+        sample_data_list_idx = 0
+
         function loadSampleLog() {
-            console.log('loadSampleLog in....')
+
             $.ajax({
                 url: '/chat/loadSampleLog',
                 type: 'POST',
@@ -577,23 +491,22 @@
                 dataType: "json",
                 contentType: "application/json",
                 success: function(data) {
-                    console.log(data)
-                    idx = 0
-                    setInterval(function() {
-                        console.log('idx : ' + idx);
-                        idx++
-                        sendMessage(data.comments[idx].id, data.comments[idx].comment, true)
-                        // Math.random() * (max - min) + min;
-                    }, 5000);
+                    sample_data_list = data.comments
+                    runSampleData()
                 }
             })
+        }
+
+        function runSampleData(){
+            sendMessage(sample_data_list[sample_data_list_idx].id, sample_data_list[sample_data_list_idx].comment, true)
+            sample_data_list_idx++
+            setTimeout(runSampleData, Math.random() * (5000 - 1000) + 1000)
         }
 
         // 워드 클라우드 그리기
         function drawWordCloud(){
             setInterval(function() {
             // 백단으로부터 데이터 로드하는 기능 필요
-                console.log('drawwordcloud')
                 $.ajax({
                     url: '/chat/getWC',
                     type: 'POST',
@@ -602,8 +515,6 @@
                     contentType: "application/json",
                     success: function(data) {
                         $('#wordcloud_area').empty()
-                        console.log('get data =====')
-                        console.log(data)
 
                         var customColorScale = anychart.scales.ordinalColor();
                         customColorScale.colors(['#55c6e8', '#FFCDD2']);
@@ -617,7 +528,26 @@
                     }
                 })    
             }, 10000);
+        }
+
+        temp_pos = 0
+        temp_neg = 0
+
+        function drawTimeArea(){
+            last_time = areaPosData[areaPosData.length-1]['x']
+
+            areaPosData.push({x: last_time + 5, y: temp_pos})
+            areaNegData.push({x: last_time + 5, y: temp_neg})
+
+            area.updateSeries([
+                    {name: "긍정", data: areaPosData,},
+                    {name: "부정", data: areaNegData,},
+                ], true
+            )
+            temp_pos = 0
+            temp_neg = 0
             
+            setTimeout(drawTimeArea, 10000)
         }
 
         $(document).ready(function () {
@@ -633,27 +563,7 @@
             loadSampleLog()
             redrawCommentList()
             drawWordCloud()
-
-            var idx = 0
-            setInterval(function() {
-                idx++
-                last_time = areaPosData[areaPosData.length-1]['x']
-                // Math.random() * (max - min) + min;
-                areaPosData.push({x: last_time + 5, y: Math.ceil(Math.random() * (200 - 80) + 80)})
-                areaNegData.push({x: last_time + 5, y: Math.ceil(Math.random() * (100 - 0) + 0)})
-
-                area.updateSeries([
-                        {
-                            name: "긍정",
-                            data: areaPosData,
-                        },
-                        {
-                            name: "부정",
-                            data: areaNegData,
-                        },
-                    ], true)
-            }, 10000);
-
+            drawTimeArea()
         });
 
     </script>
