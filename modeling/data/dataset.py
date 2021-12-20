@@ -5,7 +5,7 @@ from transformers import AutoTokenizer
 import pandas as pd
 import os
 
-from data.preprocessing import del_stopword
+from data.preprocessing import del_stopword, cleaning
 
 class DatasetForHateSpeech(Dataset):
     def __init__(
@@ -32,6 +32,8 @@ class DatasetForHateSpeech(Dataset):
 
         if 'stopwords' in config['data']['preprocessing']:
             self.data['comments'] = del_stopword(self.data['comments'].tolist())
+        if 'cleaning' in config['data']['preprocessing']:
+            self.data['comments'] = cleaning(self.data['comments'].tolist())
 
         self.tokenized_data = tokenizer(
             self.data['comments'].tolist(),#Sentence
