@@ -1,5 +1,5 @@
 let optionsVisitorsProfile  = {
-	series: [70, 30],
+	series: [0, 0],
 	labels: ['긍정', '부정'],
 	//colors: ['#435ebe','#55c6e8'],
 	colors: ['#55c6e8', '#FFCDD2'],
