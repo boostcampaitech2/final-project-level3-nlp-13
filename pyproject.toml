@@ -29,6 +29,8 @@ pytest = "6.2.5"
 loguru = "^0.5.3"
 konlpy = "^0.5.2"
 tweepy = "3.10.0"
+emoji = "^1.6.1"
+soynlp = "^0.0.493"
 
 [tool.poetry.dev-dependencies]
 

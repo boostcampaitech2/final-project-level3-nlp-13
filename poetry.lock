@@ -181,6 +181,17 @@ python-versions = "*"
 six = ">=1.4.0"
 
 [[package]]
+name = "emoji"
+version = "1.6.1"
+description = "Emoji for Python"
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.extras]
+dev = ["pytest", "coverage", "coveralls"]
+
+[[package]]
 name = "entrypoints"
 version = "0.3"
 description = "Discover and load entry points from installed packages."
@@ -1067,6 +1078,20 @@ optional = false
 python-versions = ">=3.5"
 
 [[package]]
+name = "soynlp"
+version = "0.0.493"
+description = "Unsupervised Korean Natural Language Processing Toolkits"
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+numpy = ">=1.12.1"
+psutil = ">=5.0.1"
+scikit-learn = ">=0.20.0"
+scipy = ">=1.1.0"
+
+[[package]]
 name = "starlette"
 version = "0.16.0"
 description = "The little ASGI library that shines."
@@ -1357,7 +1382,7 @@ termcolor = ">=1.1.0,<2.0.0"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "30d4ffea52627b652331e7c8f40c7cbf48113c736e0f0890d86318379afb47ae"
+content-hash = "71bd497736fd14223e02713145a801245333fe61caec80a51a70beda42936638"
 
 [metadata.files]
 aiofiles = [
@@ -1499,6 +1524,9 @@ decorator = [
 docker-pycreds = [
     {file = "docker-pycreds-0.4.0.tar.gz", hash = "sha256:6ce3270bcaf404cc4c3e27e4b6c70d3521deae82fb508767870fdbf772d584d4"},
     {file = "docker_pycreds-0.4.0-py2.py3-none-any.whl", hash = "sha256:7266112468627868005106ec19cd0d722702d2b7d5912a28e19b826c3d37af49"},
+]
+emoji = [
+    {file = "emoji-1.6.1.tar.gz", hash = "sha256:53d61a8e4c025f6c295ab99c842302c66d47952199c4fde66dd060dee3ad4324"},
 ]
 entrypoints = [
     {file = "entrypoints-0.3-py2.py3-none-any.whl", hash = "sha256:589f874b313739ad35be6e0cd7efde2a4e9b6fea91edcc34e58ecbb8dbe56d19"},
@@ -2322,6 +2350,11 @@ smmap = [
 sniffio = [
     {file = "sniffio-1.2.0-py3-none-any.whl", hash = "sha256:471b71698eac1c2112a40ce2752bb2f4a4814c22a54a3eed3676bc0f5ca9f663"},
     {file = "sniffio-1.2.0.tar.gz", hash = "sha256:c4666eecec1d3f50960c6bdf61ab7bc350648da6c126e3cf6898d8cd4ddcd3de"},
+]
+soynlp = [
+    {file = "soynlp-0.0.493-py3-none-any.whl", hash = "sha256:2aed0ced1f0f74f7bdd0bdc24a979c5cb9ee4a28393642db52a83d174ed65b7a"},
+    {file = "soynlp-0.0.493-py3.7.egg", hash = "sha256:7e89e49a729e2e2136331021d464fce58fa8738a8f007c35919c796ea52ab418"},
+    {file = "soynlp-0.0.493.tar.gz", hash = "sha256:4b20b825edbcadb9ebd494de54d8ca50b0ee317fe58d090e8b509d733422136a"},
 ]
 starlette = [
     {file = "starlette-0.16.0-py3-none-any.whl", hash = "sha256:38eb24bf705a2c317e15868e384c1b8a12ca396e5a3c3a003db7e667c43f939f"},
