@@ -16,14 +16,15 @@ from app.services.utills import is_FAQ, is_greeting, is_beep, is_positive, updat
 from app.services.utills import ClassType
 
 from collections import defaultdict
+import time
 
 class Comments(BaseModel):
     user_id: str = Field(default=str)
     text: str = Field(default=str)
     confidence: int = Field(default=int)
     time: Optional[datetime] = Field(default_factory=datetime.now)
-    label_beep: Optional[int] = None # 0: Common, 1: hate
-    label_senti: Optional[int] = None # 0: Common, 1: Neg, 2: Pos
+    label_beep: Optional[int] = None # 0: Offensive, 1: hate, 2: Common
+    label_senti: Optional[int] = None # 0: Pos 1: Neg, 2: Common
     confidence_beep: Optional[float] = None
     confidence_senti: Optional[float] = None
     is_question: Optional[bool] = None
@@ -91,6 +92,7 @@ def sendMessage(comments: Comments):
             유저의 채팅 내용, 모델, 토크나이저를 입력받아 모델에 따른 분석결과를 활용해 post processing을 적용
             최종 결과를 반환
     '''
+    start = time.time()  # 시작 시간 저장
     res = dict(comments)
     res['time'] = res['time'].strftime('%Y-%m-%d %H:%M:%S')
     preprocessed_text = res['text']
@@ -121,6 +123,7 @@ def sendMessage(comments: Comments):
     if check_beep_dictionary(preprocessed_text, beep_dic):
         res['label_beep'] = ClassType.HATE
         res['confidence_beep'] = 1.0
+        print("time :", time.time() - start)
         return JSONResponse(res) 
     else:
         beep_inference_result, beep_confidence = make_inference(preprocessed_text, beep_model, beep_tokenizer)
@@ -132,6 +135,7 @@ def sendMessage(comments: Comments):
         if is_FAQ(preprocessed_text):
             # FAQ 따로 저장
             res['is_question'] = True
+            print("time :", time.time() - start)
             return JSONResponse(res)
     
     # 부정이고 욕설이면 최종으로 욕설로 판단
@@ -141,6 +145,7 @@ def sendMessage(comments: Comments):
     res['label_beep'] = beep_inference_result
     res['confidence_beep'] = beep_confidence
 
+    print("time :", time.time() - start)
     return JSONResponse(res)
 
 @router.post("/loadSampleLog")
@@ -158,5 +163,5 @@ def get_wc():
     pos_json = [{"x":noun, "value":freq, "category":"pos"} for noun, freq in pos_word_cloud_dict.items()]
     neg_json = [{"x":noun, "value":freq, "category":"neg"} for noun, freq in neg_word_cloud_dict.items()]
     res['data'] = pos_json + neg_json
-    print(res['data'])
+
     return JSONResponse(res)
