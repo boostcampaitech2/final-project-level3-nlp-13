@@ -52,3 +52,37 @@ class DatasetForHateSpeech(Dataset):
     def __len__(self):
         return len(self.data)
 
+class DatasetForSentimentSpeech(Dataset):
+    def __init__(
+        self, 
+        tokenizer : AutoTokenizer,
+        path : str,
+    ) -> None:
+        """
+            Arguments:
+                - tokenizer : 토크나이저 종류
+                - path : 데이터 저장된 경로
+            Summary:
+                Tokenizing 된 감성 분류 데이터 셋 객체
+        """
+        self.data = pd.read_csv(path)
+        self.data = self.data.dropna(axis=0) 
+
+        self.tokenized_data = tokenizer(
+            self.data['document'].tolist(),#Sentence
+            return_tensors="pt",
+            padding=True,
+            truncation=True,
+            max_length=256,
+            add_special_tokens=True,
+        )
+
+        self.labels = self.data['label'].tolist()
+
+    def __len__(self):
+        return len(self.data)
+
+    def __getitem__(self, idx):
+        item = {key: val[idx] for key, val in self.tokenized_data.items()}
+        item['labels'] = self.labels[idx]
+        return item
