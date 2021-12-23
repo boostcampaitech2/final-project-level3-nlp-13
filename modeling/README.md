@@ -3,7 +3,33 @@
 # trained model weights
 
 # 프로젝트 구조
-
+```
+modeling/
+│  example_config.json
+│  train.py
+│
+├─data
+│      abuse_words.txt
+│      dataset.py
+│      preprocessing.py
+│      stop_words.txt
+│      __init__.py
+│
+├─logger
+│      mylogger.py
+│
+├─logs
+├─models
+│      custom.py
+│      utill.py
+│
+├─train_utills
+│      test.py
+│      trainer_setting.py
+│
+└─utills
+        utill.py
+```
 # Config
 
 ```json
