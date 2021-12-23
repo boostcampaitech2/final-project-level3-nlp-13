@@ -1,12 +1,11 @@
 from typing import *
+import torch
 from torch.utils.data import Dataset
 from transformers import AutoTokenizer
 import pandas as pd
 import os
 
-from data.preprocessing import del_stopword
-
-#DATA_PATH = "../dataset/"
+from data.preprocessing import del_stopword, cleaning
 
 class DatasetForHateSpeech(Dataset):
     def __init__(
@@ -33,20 +32,23 @@ class DatasetForHateSpeech(Dataset):
 
         if 'stopwords' in config['data']['preprocessing']:
             self.data['comments'] = del_stopword(self.data['comments'].tolist())
+        if 'cleaning' in config['data']['preprocessing']:
+            self.data['comments'] = cleaning(self.data['comments'].tolist())
 
         self.tokenized_data = tokenizer(
             self.data['comments'].tolist(),#Sentence
             return_tensors="pt",
             padding=True,
+            return_token_type_ids=False,
             truncation=True,
-            max_length=256,
+            max_length=50,
             add_special_tokens=True,
         )
         self.labels = self.data['label'].tolist()
 
     def __getitem__(self, idx):
         item = {key: val[idx] for key, val in self.tokenized_data.items()}
-        item['labels'] = self.labels[idx]
+        item['labels'] = torch.tensor(self.labels[idx])
         return item
 
     def __len__(self):
