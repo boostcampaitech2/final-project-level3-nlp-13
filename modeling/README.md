@@ -117,7 +117,14 @@ train.py -c <config dir>
         ```
 
 # 모델 성능 및 학습 결과
-
+- 악플 분석 모델  
+  - Kaggle 대회 Test set 기준 
+  - 2-STAGE 모델 적용 전 : f1-score 0.628
+  - 2-STAGE 모델 적용 후 : f1-score 0.648
+- 감성 분석 모델
+  - 라이브 커머스 데이터 기준
+  - 액티브 러닝 적용 전 : accuracy 0.64
+  - 액티브 러닝 적용 후 : accuracy 0.95 
 
 # Reference
 
