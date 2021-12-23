@@ -87,10 +87,13 @@ train.py -c <config dir>
 ```
 
 # Inference
+- config에서 do test ture로 설정 후 train.py 실행
 
-```
-inference.py -c <config dir>
-```
+        ```json
+        "test":{
+                "do_test": true
+            },
+        ```
 
 # 모델 성능 및 학습 결과
 
