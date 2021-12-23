@@ -98,8 +98,6 @@ def sendMessage(comments: Comments):
     res['time'] = res['time'].strftime('%Y-%m-%d %H:%M:%S')
     preprocessed_text = res['text']
 
-    print(res['time'])
-
     # 1. 인사인가?
     if is_greeting(preprocessed_text):
         return JSONResponse(res)
@@ -114,7 +112,6 @@ def sendMessage(comments: Comments):
         # 결과 저장
     res['label_senti'] = senti_inference_result
     res['confidence_senti'] = senti_confidence
-    print(senti_inference_result, senti_confidence, f'text:{res["text"]}', f'base:{float(res["confidence"])}')
         # Word cloud 업데이트
     if senti_inference_result == ClassType.NEGATIVE:
         update_wc(res['text'], neg_word_cloud_dict)
