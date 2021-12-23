@@ -5,7 +5,7 @@ from konlpy.tag import Mecab
 
 class ClassType:
     HATE = 1
-    OFFENSIVE = 0
+    OFFENSIVE = 1
     POSITIVE = 1
     NEGATIVE = 0
     NORMAL = 2
@@ -13,7 +13,7 @@ class ClassType:
 def is_FAQ(text: str):
     '''주어진 문장이 질문의 형태인지 아닌지 판단하여 반환'''
 
-    if '궁금' in text:
+    if '궁금' in text or '어떻게' in text:
         return True
     comp = re.compile(r'[가-힣a-zA-Zㄱ-ㅎㅏ-ㅣ]{2,}[?]+$')
     sub_text = a = comp.findall(text)
@@ -24,15 +24,11 @@ def is_FAQ(text: str):
 def is_greeting(text: str):
     '''주어진 문장이 인사의 형태인지 아닌지 판단하여 반환'''
 
-    if '안녕' in text or 'ㅎㅇ' in text:
-        return True
-    return False
+    greeting_list = ['안녕', 'ㅎㅇ', '하이', '응원', '반가워', '반갑습', '잘볼', '잘 볼']
 
-def is_beep(label: int, confidence: float, base: float):
-    '''주어진 문장이 악성인지 아닌지 class와 confidence 값을 활용해 최종 class 결정'''
-
-    if (label == ClassType.HATE or label == ClassType.OFFENSIVE) and confidence >= base:
-        return True
+    for w in greeting_list:
+        if w in text:
+            return True
     return False
 
 def is_positive(label: int, confidence: float, base: float):

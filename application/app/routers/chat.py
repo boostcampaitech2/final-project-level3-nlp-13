@@ -10,20 +10,22 @@ from pydantic import BaseModel, Field
 from starlette.responses import JSONResponse
 from typing import Optional
 
+from pytz import timezone
 from datetime import date, datetime
 from app.models.model import get_model, get_tokenizer, make_inference
-from app.services.utills import is_FAQ, is_greeting, is_beep, is_positive, update_wc, check_beep_dictionary
+from app.services.utills import is_FAQ, is_greeting, is_positive, update_wc, check_beep_dictionary
 from app.services.utills import ClassType
 
 from collections import defaultdict
+import time
 
 class Comments(BaseModel):
     user_id: str = Field(default=str)
     text: str = Field(default=str)
     confidence: int = Field(default=int)
-    time: Optional[datetime] = Field(default_factory=datetime.now)
-    label_beep: Optional[int] = None # 0: Common, 1: hate
-    label_senti: Optional[int] = None # 0: Common, 1: Neg, 2: Pos
+    time: Optional[datetime] = Field(default_factory=datetime.now(timezone('Asia/Seoul')).now)
+    label_beep: Optional[str] = None # 0: Offensive, 1: hate, 2: Common
+    label_senti: Optional[int] = None # 0: Pos 1: Neg, 2: Common
     confidence_beep: Optional[float] = None
     confidence_senti: Optional[float] = None
     is_question: Optional[bool] = None
@@ -33,7 +35,8 @@ router = APIRouter(prefix="/chat")
 templates = Jinja2Templates(directory="templates/")
 router.mount("/statics", StaticFiles(directory="statics"), name="statics")
 
-beep_model = None
+hate_or_none_model = None
+offensive_or_none_model = None
 beep_tokenizer = None
 senti_model = None
 senti_tokenizer = None
@@ -49,17 +52,20 @@ def init():
             초기 실행시, 필요한 모델과 토크나이저 및 dictionary들 로딩
     '''
     # 1. 악성 모델 로딩
-    global beep_model, beep_tokenizer, senti_model, senti_tokenizer, beep_dic
-    if beep_model is None:
-        beep_model = get_model(model_kind='beep_best.bin', numlabels=3)
+    global hate_or_none_model, offensive_or_none_model, beep_tokenizer, senti_model, senti_tokenizer, beep_dic
+    if hate_or_none_model is None:
+        hate_or_none_model = get_model(model_kind='hate.bin', numlabels=2, type='bin', model_name='custom')
+    if offensive_or_none_model is None:
+        offensive_or_none_model = get_model(model_kind='offensive.bin', numlabels=2, type='bin', model_name='custom')
+
     if beep_tokenizer is None:
         beep_tokenizer = get_tokenizer()
     
     # 2. 감성 모델 로딩
-    if senti_model is None:
-        senti_model = get_model(model_kind='senti_best.bin', numlabels=2, model_name='monologg/koelectra-small-v3-discriminator')
+    if senti_model is None:#'monologg/koelectra-base-finetuned-nsmc'
+        senti_model = get_model(model_kind='roti_final.pt', numlabels=2, model_name='monologg/koelectra-base-finetuned-nsmc', type='pt')
     if senti_tokenizer is None:
-        senti_tokenizer = get_tokenizer(model_name='monologg/koelectra-small-v3-discriminator')
+        senti_tokenizer = get_tokenizer(model_name='monologg/koelectra-base-finetuned-nsmc')
 
     # 3. 각종 사전 로딩
     with open('files/abuse_voca.json') as f:
@@ -91,6 +97,7 @@ def sendMessage(comments: Comments):
             유저의 채팅 내용, 모델, 토크나이저를 입력받아 모델에 따른 분석결과를 활용해 post processing을 적용
             최종 결과를 반환
     '''
+    start = time.time()  # 시작 시간 저장
     res = dict(comments)
     res['time'] = res['time'].strftime('%Y-%m-%d %H:%M:%S')
     preprocessed_text = res['text']
@@ -109,7 +116,6 @@ def sendMessage(comments: Comments):
         # 결과 저장
     res['label_senti'] = senti_inference_result
     res['confidence_senti'] = senti_confidence
-    print(senti_inference_result, senti_confidence, f'text:{res["text"]}', f'base:{float(res["confidence"])}')
         # Word cloud 업데이트
     if senti_inference_result == ClassType.NEGATIVE:
         update_wc(res['text'], neg_word_cloud_dict)
@@ -121,32 +127,42 @@ def sendMessage(comments: Comments):
     if check_beep_dictionary(preprocessed_text, beep_dic):
         res['label_beep'] = ClassType.HATE
         res['confidence_beep'] = 1.0
+        print("time :", time.time() - start)
         return JSONResponse(res) 
     else:
-        beep_inference_result, beep_confidence = make_inference(preprocessed_text, beep_model, beep_tokenizer)
+        beep_inference_result, _ = make_inference(preprocessed_text, hate_or_none_model, beep_tokenizer)
+        if beep_inference_result == ClassType.HATE:
+            res['label_beep'] = 'Hate'
+        # None 으로 판단시 Offensive/None 분류
+        if beep_inference_result != ClassType.HATE:
+            beep_inference_result, _ = make_inference(preprocessed_text, offensive_or_none_model, beep_tokenizer)
+            if beep_inference_result == ClassType.OFFENSIVE:
+                res['label_beep'] = 'Offensive'
     
     # 욕설이 아니면 질문으로 분류
-    _is_beep = is_beep(beep_inference_result, beep_confidence, float(res['confidence'])/100)
-    if not _is_beep:
+    if res['label_beep'] not in ['Hate', 'Offensive']:# != ClassType.HATE and beep_inference_result != ClassType.OFFENSIVE:
         beep_inference_result = ClassType.NORMAL
+        res['label_beep'] = 'None' #beep_inference_result
+        res['confidence_beep'] = _ # 사용하지 않음
         if is_FAQ(preprocessed_text):
             # FAQ 따로 저장
             res['is_question'] = True
+            print("time :", time.time() - start)
             return JSONResponse(res)
     
     # 부정이고 욕설이면 최종으로 욕설로 판단
-    if senti_inference_result == ClassType.NEGATIVE and _is_beep:
-        beep_inference_result = ClassType.HATE
+    # if senti_inference_result == ClassType.NEGATIVE and (beep_inference_result == ClassType.HATE or beep_inference_result == ClassType.OFFENSIVE):
+    #     beep_inference_result = ClassType.HATE
+    #res['label_beep'] = beep_inference_result
+    #res['confidence_beep'] = _
 
-    res['label_beep'] = beep_inference_result
-    res['confidence_beep'] = beep_confidence
-
+    print("time :", time.time() - start)
     return JSONResponse(res)
 
 @router.post("/loadSampleLog")
 def loadSampleLog():
     res = dict()    
-    df = pd.read_csv('files/sample_log.csv')
+    df = pd.read_csv('files/sample_final.csv')
 
     res['comments'] = df.to_dict('records')
 
@@ -158,5 +174,5 @@ def get_wc():
     pos_json = [{"x":noun, "value":freq, "category":"pos"} for noun, freq in pos_word_cloud_dict.items()]
     neg_json = [{"x":noun, "value":freq, "category":"neg"} for noun, freq in neg_word_cloud_dict.items()]
     res['data'] = pos_json + neg_json
-    print(res['data'])
+
     return JSONResponse(res)
