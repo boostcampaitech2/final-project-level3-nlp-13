@@ -35,3 +35,7 @@ https://github.com/arthurhenrique/cookiecutter-fastapi/tree/master/%7B%7Bcookiec
 https://github.com/shinokada/fastapi-web-starter  
 ### 👉 bootstrap code  
 https://github.com/zuramai/mazer
+### 👉 chart library  
+https://apexcharts.com  
+https://www.anychart.com/
+
