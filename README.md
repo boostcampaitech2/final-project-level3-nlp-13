@@ -29,6 +29,9 @@ _"Create Life Until End of day"_
 
 ## 2.Dependency management
 
+## 4.시연 영상
+![최종플젝 시연](https://user-images.githubusercontent.com/59302419/147213596-a13b3f6f-ae44-496b-a5a8-cdf8f9f9822d.gif)
+
 ### 👉 Poetry를 통한 패키지 버전 관리 
 
 ```
