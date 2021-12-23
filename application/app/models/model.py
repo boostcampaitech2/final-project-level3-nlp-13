@@ -50,7 +50,7 @@ def predict_from_text(
         add_special_tokens=True,
     )
     pred = model(input_ids = inputs['input_ids'].to(device), attention_mask = inputs['attention_mask'].to(device))
-    probabilities = torch.softmax(pred['logits'].detach(), dim=1)
+    probabilities = torch.softmax(pred['logits'].detach(), dim=-1)
     classes = torch.argmax(probabilities).item()
     confidence = torch.max(probabilities).item()
     return classes, confidence

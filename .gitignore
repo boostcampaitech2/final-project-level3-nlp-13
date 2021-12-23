@@ -5,11 +5,4 @@ wandb/
 nohup.out
 logs
 outputs
-beep_best.bin
-senti_best.bin
-roti_final.pt
-sa_final.bin
-hate_or_none.bin
-hate_or_none.json
-offensive_or_none.bin
-offensive_or_none.json
+weights
