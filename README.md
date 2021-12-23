@@ -1,7 +1,7 @@
 # 호스트, 넌 방송만해! 관리는 우리가 할께!
 
 - 🍀 Naver Boost camp AI tech 2nd final project
-- 📹 [Demonstration video]() , 🖇️ [presentation slide]()
+- 📹 [Demonstration video]() , 🖇️ [presentation slide](https://docs.google.com/presentation/d/1pmBbn0NuesvNO-vzAuRdGg0Ph0q09odh/edit?usp=sharing&ouid=116368231704837867107&rtpof=true&sd=true)
 
 ## 1.Project Abstract
 
