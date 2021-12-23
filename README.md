@@ -5,18 +5,18 @@
 
 ## 1.Project Abstract
 
-### 👉 Team CLUE 
+### Team CLUE 
 
-_"Create Life Until End of day"_
+👉 _"Create Life Until End of day"_
 
-#### 🔅 Members  
+#### 👨‍👩‍👦‍👦 Members  
 
 김강민|김동현|김상욱|양준혁|이종혁|임경현|임효석|
 :-:|:-:|:-:|:-:|:-:|:-:|:-:
 <img src='' height=80 width=80px></img>|<img src='' height=80 width=80px></img>|<img src='' height=80 width=80px></img>|<img src='' height=80 width=80px></img>|<img src='' height=80 width=80px></img>|<img src='' height=80 width=80px></img>|<img src='' height=80 width=80px></img>
 [Github](https://github.com/Gangsss)|[Github](https://github.com/Kimdongui)|[Github](https://github.com/lswkim)|[Github](https://github.com/surfing2003)|[Github](https://github.com/jonhyuk0922)|[Github](https://github.com/KyungHyunLim)|[Github](https://github.com/limhyoseok)
 
-#### 🔅 Contribution  
+#### 🏆 Contribution  
 
 - [`임경현`](https://github.com/KyungHyunLim) &nbsp; PM • Baseline • Backend
 - [`김강민`](https://github.com/Gangsss) &nbsp; Hate speech detection model • Refactoring
@@ -28,7 +28,8 @@ _"Create Life Until End of day"_
 
 
 ## 2.Dependency management
-### 👉 Poetry를 통한 패키지 버전 관리 
+
+👉 Poetry를 통한 패키지 버전 관리 
 
 ```
 # curl 설치
@@ -45,10 +46,18 @@ poetry use [사용하는 가상환경의 `python path` | 가상환경이 실행�
 poetry install
 ```
 
+
 ## 3. Equipment & Software
+
+- [OS] Linux version 4.4.0-59-generic
+- [CPU / GPU] Intel(R) Xeon(R) Gold 5220 CPU @ 2.20GHz / Tesla V100-SXM2-32GB  * 7
+- [Collaboration Tool] Git-hub / Poetry / Slack / Notion / Wandb 
+- [IDE] VSCode / Pycharm / Jupyter lab
+
 
 ## 4.시연 영상
 ![최종플젝 시연](https://user-images.githubusercontent.com/59302419/147213596-a13b3f6f-ae44-496b-a5a8-cdf8f9f9822d.gif)
+
 
 ## 5. License
 
