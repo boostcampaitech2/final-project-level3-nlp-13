@@ -17,8 +17,8 @@ application
 │   ├── models
 │   │   ├── model.py           - load model, tokenizer / inference
 │   │   └── weights
-│   │       ├── beep_best.bin  - hate classification model(need to upload)
-│   │       └── senti_best.bin - sentiment classification model(need to upload)
+│   │       ├── beep_best.bin  - hate speech detection model(need to upload)
+│   │       └── senti_best.bin - sentiment analysis model(need to upload)
 │   ├── routers                - api routers
 │   │   ├── chat.py            - router of demo service
 │   │   └── sample.py
