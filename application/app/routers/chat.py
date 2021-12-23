@@ -10,6 +10,7 @@ from pydantic import BaseModel, Field
 from starlette.responses import JSONResponse
 from typing import Optional
 
+from pytz import timezone
 from datetime import date, datetime
 from app.models.model import get_model, get_tokenizer, make_inference
 from app.services.utills import is_FAQ, is_greeting, is_beep, is_positive, update_wc, check_beep_dictionary
@@ -22,7 +23,7 @@ class Comments(BaseModel):
     user_id: str = Field(default=str)
     text: str = Field(default=str)
     confidence: int = Field(default=int)
-    time: Optional[datetime] = Field(default_factory=datetime.now)
+    time: Optional[datetime] = Field(default_factory=datetime.now(timezone('Asia/Seoul')).now)
     label_beep: Optional[int] = None # 0: Offensive, 1: hate, 2: Common
     label_senti: Optional[int] = None # 0: Pos 1: Neg, 2: Common
     confidence_beep: Optional[float] = None
@@ -52,15 +53,15 @@ def init():
     # 1. 악성 모델 로딩
     global beep_model, beep_tokenizer, senti_model, senti_tokenizer, beep_dic
     if beep_model is None:
-        beep_model = get_model(model_kind='beep_best.bin', numlabels=3)
+        beep_model = get_model(model_kind='beep_best.bin', numlabels=3, type='bin')
     if beep_tokenizer is None:
         beep_tokenizer = get_tokenizer()
     
     # 2. 감성 모델 로딩
     if senti_model is None:
-        senti_model = get_model(model_kind='senti_best.bin', numlabels=2, model_name='monologg/koelectra-small-v3-discriminator')
+        senti_model = get_model(model_kind='sa_final.bin', numlabels=2, model_name='monologg/koelectra-base-finetuned-nsmc', type='bin')
     if senti_tokenizer is None:
-        senti_tokenizer = get_tokenizer(model_name='monologg/koelectra-small-v3-discriminator')
+        senti_tokenizer = get_tokenizer(model_name='monologg/koelectra-base-finetuned-nsmc')
 
     # 3. 각종 사전 로딩
     with open('files/abuse_voca.json') as f:
@@ -97,6 +98,8 @@ def sendMessage(comments: Comments):
     res['time'] = res['time'].strftime('%Y-%m-%d %H:%M:%S')
     preprocessed_text = res['text']
 
+    print(res['time'])
+
     # 1. 인사인가?
     if is_greeting(preprocessed_text):
         return JSONResponse(res)
@@ -132,6 +135,8 @@ def sendMessage(comments: Comments):
     _is_beep = is_beep(beep_inference_result, beep_confidence, float(res['confidence'])/100)
     if not _is_beep:
         beep_inference_result = ClassType.NORMAL
+        res['label_beep'] = beep_inference_result
+        res['confidence_beep'] = beep_confidence
         if is_FAQ(preprocessed_text):
             # FAQ 따로 저장
             res['is_question'] = True
@@ -151,7 +156,7 @@ def sendMessage(comments: Comments):
 @router.post("/loadSampleLog")
 def loadSampleLog():
     res = dict()    
-    df = pd.read_csv('files/sample_log.csv')
+    df = pd.read_csv('files/sample_final.csv')
 
     res['comments'] = df.to_dict('records')
 

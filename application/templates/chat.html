@@ -312,7 +312,7 @@
                 dataType: "json",
                 contentType: "application/json",
                 success: function(data) {
-
+                    console.log(data)
                     text_html = '<h5 class="mb-1">' + data.text + '</h5>'
 
                     if(data.is_question){
@@ -351,7 +351,7 @@
                             totalCommentCnt++;
                             temp_neg++;
                             areaNegData[areaNegData.length-1]['y'] += 1
-                            is_hate_or_neg = true
+                            //is_hate_or_neg = true
                         }
 
                         // 2. 욕설 글 판단
@@ -365,7 +365,7 @@
                         //     text_html = '<h5 class="mb-1">' + '<i style="color:red;" class="fas fa-angry"></i> ' + data.text + '</h5>';
                         // }
 
-                        if (is_hate_or_neg){
+                        if (data.label_beep == 1 && data.label_senti == 0){
 
                             if(hate_speech_dict.get(data.user_id) == undefined) {
                                 hate_speech_dict.set(data.user_id, [[data.text, data.time]])
@@ -466,7 +466,7 @@
             var options = {
                 range: 'min',
                 max: 100,
-                value: 85,
+                value: 90,
                 slide: function(event, ui) {
                     var max = ui.value;
                     $("#amount").val(max + "%");
@@ -500,7 +500,7 @@
         function runSampleData(){
             sendMessage(sample_data_list[sample_data_list_idx].id, sample_data_list[sample_data_list_idx].comment, true)
             sample_data_list_idx++
-            setTimeout(runSampleData, Math.random() * (5000 - 1000) + 1000)
+            setTimeout(runSampleData, Math.random() * (2222 - 1000) + 1000)
         }
 
         // 워드 클라우드 그리기
@@ -560,7 +560,7 @@
                 }
             })
 
-            loadSampleLog()
+            //loadSampleLog()
             redrawCommentList()
             drawWordCloud()
             drawTimeArea()

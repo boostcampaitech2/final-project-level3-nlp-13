@@ -12,19 +12,21 @@ class_dict = {
 }
 '''
 
-def get_model(model_kind:str, numlabels:int, model_name:str='beomi/KcELECTRA-base')->ElectraForSequenceClassification:
+def get_model(model_kind:str, numlabels:int, type:str, model_name:str='beomi/KcELECTRA-base')->ElectraForSequenceClassification:
     '''모델 가져오기'''
 
     device = 'cuda:0' if torch.cuda.is_available() else 'cpu'
-    #model = AutoModelForSequenceClassification.from_pretrained(model_name).to(device)
     
     config = AutoConfig.from_pretrained(model_name)
     config.num_labels = numlabels
     model = ElectraForSequenceClassification(config=config)
-    state_dicts = torch.load('./app/models/weights/' + model_kind)
-    model.load_state_dict(state_dicts)
+    if type == 'pt':
+        model = torch.load('./app/models/weights/' + model_kind)
+    elif type == 'bin':
+        state_dicts = torch.load('./app/models/weights/' + model_kind)
+        model.load_state_dict(state_dicts)
     model = model.to(device)
-    
+    model.eval()
     return model
 
 def get_tokenizer(model_name:str='beomi/KcELECTRA-base')->AutoTokenizer:
@@ -45,10 +47,10 @@ def predict_from_text(
         return_tensors="pt",
         padding=True,
         truncation=True,
-        max_length=50,
+        max_length=256,
         add_special_tokens=True,
     )
-    pred = model(input_ids = inputs['input_ids'].to(device))
+    pred = model(input_ids = inputs['input_ids'].to(device), attention_mask = inputs['attention_mask'].to(device))
     probabilities = torch.softmax(pred['logits'].detach(), dim=1)
     classes = torch.argmax(probabilities).item()
     confidence = torch.max(probabilities).item()
