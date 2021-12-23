@@ -12,6 +12,16 @@
 - [감성 분석용 말뭉치(네이버 쇼핑 리뷰, 스팀 리뷰)](https://github.com/bab2min/corpus/tree/master/sentiment)
 
 # trained model weights
+```python
+from transformers import ElectraModel
+```
+|Data Usage|num_labels|label's meaing
+|:---|:---:|---|
+|[BEEP only](https://drive.google.com/file/d/1DG3Ql7MXPFwRUiT7ajwur8jDTW46pkKY/view?usp=sharing)|3|0:none, 1:offensive, 2:hate
+|[BEEP only, 2stage, hate](https://drive.google.com/file/d/1D9DoIqTtTtV3AuaCSj20b5o7ftXE2KAk/view?usp=sharing)|2|0:none,1:hate|
+|[BEEP only, 2stage, offensive](https://drive.google.com/file/d/1CqG5jQfF0FUKMbIhhdX6HtziIngmgAJJ/view?usp=sharing)|2|0:none,1:offensive|
+|[Whole data, 2stage, hate](https://drive.google.com/file/d/1CoChY-cpi3hTe_N-triUI07PDuPHk5JF/view?usp=sharing)|2|0:none,1:hate|
+|[Whole data, 2stage, hate](https://drive.google.com/file/d/1UOuqedLA8fbEXL1JbSw17ZttF1aUXidj/view?usp=sharing)|2|0:none,1:offensive|
 
 # 프로젝트 구조
 ```
