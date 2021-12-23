@@ -99,3 +99,35 @@ train.py -c <config dir>
 
 
 # Reference
+
+
+## Dataset
+
+
+### 악성 채팅 분류
+- [욕설 감지 데이터 셋](https://github.com/2runo/Curse-detection-data)
+
+- [Korean Hate Speech Dataset](https://www.kaggle.com/captainnemo9292/korean-hate-speech-dataset/metadata)
+
+- [Korean Hate Speech Detection](https://github.com/kocohub/korean-hate-speech)
+
+### 감성 분류 모델
+- [nsmc](https://github.com/e9t/nsmc)
+
+- [감성 분석용 말뭉치(네이버 쇼핑 리뷰, 스팀 리뷰)](https://github.com/bab2min/corpus/tree/master/sentiment)
+
+
+
+## Paper
+
+- [ELECTRA: Pre-training Text Encoders as Discriminators Rather Than Generators](https://arxiv.org/abs/2003.10555)
+
+- [Don't Stop Pretraining: Adapt Language Models to Domains and Tasks](https://arxiv.org/abs/2004.10964)
+
+- [Curriculum Learning for Natural Language Understanding](https://aclanthology.org/2020.acl-main.542.pdf)
+
+- [BEEP! Korean Corpus of Online News Comments for Toxic Speech Detection](https://arxiv.org/abs/2005.12503)
+
+
+- [Learning Loss for Active Learning
+](https://arxiv.org/abs/1905.03677)
