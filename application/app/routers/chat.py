@@ -13,7 +13,7 @@ from typing import Optional
 from pytz import timezone
 from datetime import date, datetime
 from app.models.model import get_model, get_tokenizer, make_inference
-from app.services.utills import is_FAQ, is_greeting, is_beep, is_positive, update_wc, check_beep_dictionary
+from app.services.utills import is_FAQ, is_greeting, is_positive, update_wc, check_beep_dictionary
 from app.services.utills import ClassType
 
 from collections import defaultdict
@@ -35,7 +35,8 @@ router = APIRouter(prefix="/chat")
 templates = Jinja2Templates(directory="templates/")
 router.mount("/statics", StaticFiles(directory="statics"), name="statics")
 
-beep_model = None
+hate_or_none_model = None
+offensive_or_none_model = None
 beep_tokenizer = None
 senti_model = None
 senti_tokenizer = None
@@ -51,9 +52,12 @@ def init():
             초기 실행시, 필요한 모델과 토크나이저 및 dictionary들 로딩
     '''
     # 1. 악성 모델 로딩
-    global beep_model, beep_tokenizer, senti_model, senti_tokenizer, beep_dic
-    if beep_model is None:
-        beep_model = get_model(model_kind='beep_best.bin', numlabels=3, type='bin')
+    global hate_or_none_model, offensive_or_none_model, beep_tokenizer, senti_model, senti_tokenizer, beep_dic
+    if hate_or_none_model is None:
+        hate_or_none_model = get_model(model_kind='hate_or_none.bin', numlabels=2, type='bin', model_name='custom')
+    if offensive_or_none_model is None:
+        offensive_or_none_model = get_model(model_kind='offensive_or_none.bin', numlabels=2, type='bin', model_name='custom')
+
     if beep_tokenizer is None:
         beep_tokenizer = get_tokenizer()
     
@@ -126,14 +130,16 @@ def sendMessage(comments: Comments):
         print("time :", time.time() - start)
         return JSONResponse(res) 
     else:
-        beep_inference_result, beep_confidence = make_inference(preprocessed_text, beep_model, beep_tokenizer)
+        beep_inference_result, _ = make_inference(preprocessed_text, hate_or_none_model, beep_tokenizer)
+        # None 으로 판단시 Offensive/None 분류
+        if beep_inference_result != ClassType.HATE:
+            beep_inference_result, _ = make_inference(preprocessed_text, offensive_or_none_model, beep_tokenizer)
     
     # 욕설이 아니면 질문으로 분류
-    _is_beep = is_beep(beep_inference_result, beep_confidence, float(res['confidence'])/100)
-    if not _is_beep:
+    if beep_inference_result != ClassType.HATE and beep_inference_result != ClassType.OFFENSIVE:
         beep_inference_result = ClassType.NORMAL
         res['label_beep'] = beep_inference_result
-        res['confidence_beep'] = beep_confidence
+        res['confidence_beep'] = _ # 사용하지 않음
         if is_FAQ(preprocessed_text):
             # FAQ 따로 저장
             res['is_question'] = True
@@ -141,11 +147,11 @@ def sendMessage(comments: Comments):
             return JSONResponse(res)
     
     # 부정이고 욕설이면 최종으로 욕설로 판단
-    if senti_inference_result == ClassType.NEGATIVE and _is_beep:
+    if senti_inference_result == ClassType.NEGATIVE and (beep_inference_result == ClassType.HATE or beep_inference_result == ClassType.OFFENSIVE):
         beep_inference_result = ClassType.HATE
 
     res['label_beep'] = beep_inference_result
-    res['confidence_beep'] = beep_confidence
+    res['confidence_beep'] = _
 
     print("time :", time.time() - start)
     return JSONResponse(res)

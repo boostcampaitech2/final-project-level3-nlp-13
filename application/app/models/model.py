@@ -5,14 +5,6 @@ import torch
 from transformers import ElectraForSequenceClassification, AutoModelForSequenceClassification, AutoConfig, AutoTokenizer
 from app.models.custom_model import CustomForSequenceClassification
 
-'''
-class_dict = {
-    0: 'None',
-    1: 'Hate',
-    2: 'Hate',
-}
-'''
-
 def get_model(model_kind:str, numlabels:int, type:str, model_name:str='beomi/KcELECTRA-base')->ElectraForSequenceClassification:
     '''모델 가져오기'''
 

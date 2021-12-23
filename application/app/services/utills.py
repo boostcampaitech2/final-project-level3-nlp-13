@@ -5,7 +5,7 @@ from konlpy.tag import Mecab
 
 class ClassType:
     HATE = 1
-    OFFENSIVE = 0
+    OFFENSIVE = 1
     POSITIVE = 1
     NEGATIVE = 0
     NORMAL = 2
@@ -29,13 +29,6 @@ def is_greeting(text: str):
     for w in greeting_list:
         if w in text:
             return True
-    return False
-
-def is_beep(label: int, confidence: float, base: float):
-    '''주어진 문장이 악성인지 아닌지 class와 confidence 값을 활용해 최종 class 결정'''
-
-    if (label == ClassType.HATE or label == ClassType.OFFENSIVE) and confidence >= base:
-        return True
     return False
 
 def is_positive(label: int, confidence: float, base: float):
