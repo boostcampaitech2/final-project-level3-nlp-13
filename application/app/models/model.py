@@ -3,6 +3,7 @@ from typing import *
 import torch
 
 from transformers import ElectraForSequenceClassification, AutoModelForSequenceClassification, AutoConfig, AutoTokenizer
+from app.models.custom_model import CustomForSequenceClassification
 
 '''
 class_dict = {
@@ -17,9 +18,15 @@ def get_model(model_kind:str, numlabels:int, type:str, model_name:str='beomi/KcE
 
     device = 'cuda:0' if torch.cuda.is_available() else 'cpu'
     
-    config = AutoConfig.from_pretrained(model_name)
-    config.num_labels = numlabels
-    model = ElectraForSequenceClassification(config=config)
+    if model_name =='custom':
+        config = AutoConfig.from_pretrained('./app/models/weights/' + model_kind.replace('bin', 'json'))
+        config.num_labels = numlabels
+        model = CustomForSequenceClassification(config=config)
+    else:
+        config = AutoConfig.from_pretrained(model_name)
+        config.num_labels = numlabels
+        model = ElectraForSequenceClassification(config=config)
+        
     if type == 'pt':
         model = torch.load('./app/models/weights/' + model_kind)
     elif type == 'bin':
