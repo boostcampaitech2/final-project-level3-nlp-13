@@ -1,9 +1,11 @@
 from typing import *
 import nltk
 from nltk.tokenize import word_tokenize
-
 from tqdm import tqdm
 from logger.mylogger import set_logger
+import emoji
+from soynlp.normalizer import repeat_normalize
+import re
 
 def del_stopword(
         texts:str,
@@ -39,5 +41,26 @@ def del_stopword(
         preprcessed_text.append(' '.join(result))
     
     loger.info("Complete delete stop words!!")
+
+    return preprcessed_text
+
+def cleaning(texts):
+    emojis = ''.join(emoji.UNICODE_EMOJI.keys())
+    pattern = re.compile(f'[^ .,?!/@$%~％·∼()\x00-\x7Fㄱ-ㅣ가-힣{emojis}]+')
+    url_pattern = re.compile(r'https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)')
+
+    loger = set_logger()
+    loger.info("Cleaning sentence")
+
+    preprcessed_text = []
+    for text in tqdm(texts):
+        text = pattern.sub(' ', str(text))
+        text = url_pattern.sub('', text)
+        text = text.strip()
+        text = repeat_normalize(text, num_repeats=2)
+
+        preprcessed_text.append(text)
+
+    loger.info("Complete cleaning words!!")
 
     return preprcessed_text
