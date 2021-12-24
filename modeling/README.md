@@ -119,11 +119,11 @@ train.py -c <config dir>
 # 모델 성능 및 학습 결과
 - 악플 분석 모델  
   - Kaggle 대회 Test set 기준 
-  - 2-STAGE 모델 적용 전 : f1-score 0.628
-  - 2-STAGE 모델 적용 후 : f1-score 0.648
+          - 2-STAGE 모델 적용 전 : f1-score 0.628
+          - 2-STAGE 모델 적용 후 : f1-score 0.648
   - [Kaggle 리더보드](https://www.kaggle.com/c/korean-hate-speech-detection/leaderboard)
-  - Best 3 model 
-    ![Validation Score](https://user-images.githubusercontent.com/42054789/147218458-a64e0450-60b3-43c0-9a37-33eeadf7ce1f.png)
+          - Best 3 model 
+        ![Validation Score](https://user-images.githubusercontent.com/42054789/147218458-a64e0450-60b3-43c0-9a37-33eeadf7ce1f.png)
 
 - 감성 분석 모델
   - 라이브 커머스 데이터 기준
