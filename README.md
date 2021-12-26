@@ -31,7 +31,7 @@
 
 #### 🏆 Contribution  
 
-- [`임경현`](https://github.com/KyungHyunLim) &nbsp; PM • Baseline • Backend
+- [`임경현`](https://github.com/KyungHyunLim) &nbsp; PM • Baseline • Hate speech detection model • Backend
 - [`김강민`](https://github.com/Gangsss) &nbsp; Hate speech detection model • Refactoring
 - [`김동현`](https://github.com/Kimdongui) &nbsp; Hate speech detection model • Refactoring • Frontend
 - [`김상욱`](https://github.com/lswkim) &nbsp; Frontend • Sentiment analysis model
