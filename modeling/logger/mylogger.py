@@ -1,9 +1,8 @@
-import logging
-import pytz
-import logging
 import datetime
-
+import logging
 from glob import glob
+
+import pytz
 
 
 class Formatter(logging.Formatter):

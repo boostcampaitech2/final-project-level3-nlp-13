@@ -1,14 +1,9 @@
 from typing import *
 
 import torch
-
-from transformers import (
-    ElectraForSequenceClassification,
-    AutoModelForSequenceClassification,
-    AutoConfig,
-    AutoTokenizer,
-)
 from app.models.custom_model import CustomForSequenceClassification
+from transformers import (AutoConfig, AutoModelForSequenceClassification,
+                          AutoTokenizer, ElectraForSequenceClassification)
 
 
 def get_model(

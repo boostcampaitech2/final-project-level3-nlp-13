@@ -1,7 +1,7 @@
-from fastapi import FastAPI, Request, Form, APIRouter, requests
+from fastapi import APIRouter, FastAPI, Form, Request, requests
 from fastapi.responses import HTMLResponse
-from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
+from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel
 from starlette.responses import JSONResponse
 

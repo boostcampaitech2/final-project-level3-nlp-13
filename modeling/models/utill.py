@@ -1,9 +1,10 @@
 from typing import *
-from models.custom import CustomForSequenceClassification
+
 import torch.nn as nn
-from transformers import AutoConfig, AutoModelForSequenceClassification, AutoModel
-from transformers import AutoTokenizer
-from transformers import PreTrainedTokenizerFast
+from models.custom import CustomForSequenceClassification
+from transformers import (AutoConfig, AutoModel,
+                          AutoModelForSequenceClassification, AutoTokenizer,
+                          PreTrainedTokenizerFast)
 
 
 def get_model(

@@ -2,9 +2,8 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from torch.nn import BCEWithLogitsLoss, CrossEntropyLoss, MSELoss
-
-from transformers.models.electra import ElectraPreTrainedModel, ElectraModel
 from transformers.modeling_outputs import SequenceClassifierOutput
+from transformers.models.electra import ElectraModel, ElectraPreTrainedModel
 
 
 class ConvHead(nn.Module):

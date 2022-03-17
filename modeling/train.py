@@ -2,16 +2,15 @@ import os
 
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
-import sys
 import getopt
+import sys
 
-from utills.utill import read_config
-from models.utill import get_model, get_tokenizer
-from train_utills.trainer_setting import set_trainer
-from train_utills.test import do_test
 from data.dataset import DatasetForHateSpeech
-
 from logger.mylogger import set_logger
+from models.utill import get_model, get_tokenizer
+from train_utills.test import do_test
+from train_utills.trainer_setting import set_trainer
+from utills.utill import read_config
 
 
 def get_config(loger):

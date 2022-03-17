@@ -1,8 +1,7 @@
 from typing import *
 
+from sklearn.metrics import accuracy_score, f1_score
 from transformers import Trainer, TrainingArguments
-
-from sklearn.metrics import f1_score, accuracy_score
 
 
 def macro_f1(preds, labels):

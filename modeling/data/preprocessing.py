@@ -1,11 +1,12 @@
-from typing import *
-import nltk
-from nltk.tokenize import word_tokenize
-from tqdm import tqdm
-from logger.mylogger import set_logger
-import emoji
-from soynlp.normalizer import repeat_normalize
 import re
+from typing import *
+
+import emoji
+import nltk
+from logger.mylogger import set_logger
+from nltk.tokenize import word_tokenize
+from soynlp.normalizer import repeat_normalize
+from tqdm import tqdm
 
 
 def del_stopword(

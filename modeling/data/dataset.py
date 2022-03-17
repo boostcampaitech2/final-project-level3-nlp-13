@@ -1,11 +1,11 @@
+import os
 from typing import *
+
+import pandas as pd
 import torch
+from data.preprocessing import cleaning, del_stopword
 from torch.utils.data import Dataset
 from transformers import AutoTokenizer
-import pandas as pd
-import os
-
-from data.preprocessing import del_stopword, cleaning
 
 
 class DatasetForHateSpeech(Dataset):

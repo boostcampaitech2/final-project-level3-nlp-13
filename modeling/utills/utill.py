@@ -1,6 +1,5 @@
-from typing import *
-
 import json
+from typing import *
 
 
 def read_config(json_file_dir: str) -> Dict:

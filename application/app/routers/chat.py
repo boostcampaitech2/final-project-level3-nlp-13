@@ -1,29 +1,21 @@
-from typing import *
 import json
-from fastapi import Request, Form, APIRouter, HTTPException
-import pandas as pd
-
-from fastapi.responses import HTMLResponse
-from fastapi.templating import Jinja2Templates
-from fastapi.staticfiles import StaticFiles
-from pydantic import BaseModel, Field
-from starlette.responses import JSONResponse
+import time
+from collections import defaultdict
+from datetime import date, datetime
+from typing import *
 from typing import Optional
 
-from pytz import timezone
-from datetime import date, datetime
+import pandas as pd
 from app.models.model import get_model, get_tokenizer, make_inference
-from app.services.utills import (
-    is_FAQ,
-    is_greeting,
-    is_positive,
-    update_wc,
-    check_beep_dictionary,
-)
-from app.services.utills import ClassType
-
-from collections import defaultdict
-import time
+from app.services.utills import (ClassType, check_beep_dictionary, is_FAQ,
+                                 is_greeting, is_positive, update_wc)
+from fastapi import APIRouter, Form, HTTPException, Request
+from fastapi.responses import HTMLResponse
+from fastapi.staticfiles import StaticFiles
+from fastapi.templating import Jinja2Templates
+from pydantic import BaseModel, Field
+from pytz import timezone
+from starlette.responses import JSONResponse
 
 
 class Comments(BaseModel):

@@ -1,6 +1,6 @@
+import re
 from typing import Dict, List
 
-import re
 from konlpy.tag import Mecab
 
 

@@ -1,14 +1,12 @@
+import json
+import os
+from glob import glob
 from typing import *
 
-import os
-import json
-from glob import glob
-
-from tqdm import tqdm
-
 import torch
-from torch.utils.data import Dataset, DataLoader
-from sklearn.metrics import f1_score, accuracy_score
+from sklearn.metrics import accuracy_score, f1_score
+from torch.utils.data import DataLoader, Dataset
+from tqdm import tqdm
 
 
 def load_best_model(model_dir: str, model):
