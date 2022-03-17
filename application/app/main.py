@@ -13,6 +13,7 @@ app.include_router(sample.router)
 templates = Jinja2Templates(directory="templates/")
 app.mount("/statics", StaticFiles(directory="statics"), name="statics")
 
+
 @app.get("/")
 def home():
-    return {'hello': 'world'}
+    return {"hello": "world"}
