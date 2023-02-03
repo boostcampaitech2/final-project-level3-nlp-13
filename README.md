@@ -41,22 +41,18 @@
 
 ## 2.Dependency management
 
-👉 Poetry를 통한 dependency control
+### 👉 Poetry를 통한 dependency control
 
-```
-# curl 설치
-apt-get install curl #7.58.0
+- poetry 설치
+   - [poetry 공식 설치 방법](https://python-poetry.org/docs/#installation)
 
-# poetry 설치
-- [poetry 공식 설치 방법](https://python-poetry.org/docs/#installation)
-
-# 가상 환경 활성화
+- 가상 환경 활성화
 - conda example
 ```bash
 $ conda activate clue-system
 ```
 
-# Repo clone & dependency install
+- Repo clone & dependency install
 ```bash
 $ git clone https://github.com/boostcampaitech2/final-project-level3-nlp-13.git
 $ cd final-project-level3-nlp-13
