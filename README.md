@@ -1,7 +1,6 @@
 # 호스트, 넌 방송만해! 관리는 우리가 할께!
 
 - 🍀 Naver Boost camp AI tech 2nd final project
-- 📹 [Demonstration video]() , 🖇️ [presentation slide](https://docs.google.com/presentation/d/1pmBbn0NuesvNO-vzAuRdGg0Ph0q09odh/edit?usp=sharing&ouid=116368231704837867107&rtpof=true&sd=true)
 
 ## 1.Project Abstract
 
@@ -42,21 +41,26 @@
 
 ## 2.Dependency management
 
-👉 Poetry를 통한 패키지 버전 관리 
+👉 Poetry를 통한 dependency control
 
 ```
 # curl 설치
 apt-get install curl #7.58.0
 
 # poetry 설치
-curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python
+- [poetry 공식 설치 방법](https://python-poetry.org/docs/#installation)
 
-# poetry 탭완성 활성화
-~/.bashrc를 수정하여 poetry를 shell에서 사용 할 수 있도록 가상환경에 추가
-poetry use [사용하는 가상환경의 `python path` | 가상환경이 실행중이라면 `python`]  
+# 가상 환경 활성화
+- conda example
+```bash
+$ conda activate clue-system
+```
 
-# repo download 후 버전 적용 (poetry.toml에 따라 적용)
-poetry install
+# Repo clone & dependency install
+```bash
+$ git clone https://github.com/boostcampaitech2/final-project-level3-nlp-13.git
+$ cd final-project-level3-nlp-13
+$ poetry install
 ```
 
 
@@ -65,7 +69,6 @@ poetry install
 - [OS] Linux version 4.4.0-59-generic
 - [CPU / GPU] Intel(R) Xeon(R) Gold 5220 CPU @ 2.20GHz / Tesla V100-SXM2-32GB  * 7
 - [Collaboration Tool] Git-hub / Poetry / Slack / Notion / Wandb 
-- [IDE] VSCode / Pycharm / Jupyter lab
 
 
 ## 4.시연 영상
